@@ -47,8 +47,8 @@ namespace PhysicsTesting
         {
             graphics = new GraphicsDeviceManager(this);
             // Screen Resolution
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
             
             Content.RootDirectory = "Content";
         }

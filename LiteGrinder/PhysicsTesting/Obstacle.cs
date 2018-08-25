@@ -29,10 +29,13 @@ namespace LiteGrinder
 
         public static void CreateTestStage(List<Obstacle> obstacles, World world, Texture2D texture2d)
         {
-            new Obstacle(world, new Vector2(0f, 3f), ConvertUnits.ToSimUnits(130), ConvertUnits.ToSimUnits(100), 1f, 0, BodyType.Static, texture2d, obstacles);
-            //new Obstacle(world, new Vector2(2.5f, 1f), ConvertUnits.ToSimUnits(130), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new Obstacle(world, new Vector2(6.0f, 3f), ConvertUnits.ToSimUnits(130), ConvertUnits.ToSimUnits(100), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new Obstacle(world, new Vector2(7.0f, 5.0f), ConvertUnits.ToSimUnits(500), ConvertUnits.ToSimUnits(100), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(0f, 3f), ConvertUnits.ToSimUnits(300), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(4f, 1f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(800), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(10f, 4f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(10f, 7f), ConvertUnits.ToSimUnits(500), ConvertUnits.ToSimUnits(100), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(15f, 0f), ConvertUnits.ToSimUnits(600), ConvertUnits.ToSimUnits(600), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(15f, 10f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new Obstacle(world, new Vector2(19f, 6f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d, obstacles);
         }
     }
 }
