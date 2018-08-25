@@ -16,6 +16,7 @@ namespace PhysicsTesting
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        bool gameisproceeding = true;
 
         //circle
         private Body circle;
@@ -121,7 +122,10 @@ namespace PhysicsTesting
         {
             HandleControls(gameTime);
 
-            world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1/30f));
+            if (gameisproceeding)
+                world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1 / 30f));
+            else
+                world.Step(0);
 
             base.Update(gameTime);
         }
@@ -154,6 +158,12 @@ namespace PhysicsTesting
                     boxes.Clear();
                     lines.Clear();
                 }
+            }
+
+            if (state.IsKeyDown(Keys.W) && _oldKeyState.IsKeyUp(Keys.W))
+            {
+                gameisproceeding = (gameisproceeding ? false : true);
+                Console.WriteLine(gameisproceeding);
             }
 
             // Jump when you press space (Still not finished)
