@@ -36,6 +36,7 @@ namespace PhysicsTesting
         private Vector2 cameraPosition;
         private Vector2 screenCenter;
         private Vector2 startPos = ConvertUnits.ToSimUnits(new Vector2(50,50));
+        private float totallength = 0;
 
         private DebugView debuginfo;
 
@@ -101,6 +102,7 @@ namespace PhysicsTesting
             circle.SetFriction(0.0f);
 
             Obstacle.CreateTestStage(obstacles, world, pixel);
+            CollectableItem.CreateCorrectableItem(world);
 
         }
 
@@ -121,6 +123,7 @@ namespace PhysicsTesting
         protected override void Update(GameTime gameTime)
         {
             HandleControls(gameTime);
+            CollectableItem.UpdataCollactableItem(world);
 
             if (gameisproceeding)
                 world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1 / 30f));
@@ -138,6 +141,7 @@ namespace PhysicsTesting
             if (mousePos == Vector2.Zero)
             {
                 mousePos = new Vector2(mouseState.X, mouseState.Y);
+                oldMousePos = mousePos;
             }
 
             if (state.IsKeyDown(Keys.Escape))
@@ -149,6 +153,7 @@ namespace PhysicsTesting
                 circle.Position = startPos;
                 circle.LinearVelocity = new Vector2(0, -1f);
                 circle.AngularVelocity = 0;
+                totallength = 0;
                 if (boxes.Count > 0)
                 {
                     foreach (Body b in boxes)
@@ -163,12 +168,11 @@ namespace PhysicsTesting
             if (state.IsKeyDown(Keys.W) && _oldKeyState.IsKeyUp(Keys.W))
             {
                 gameisproceeding = (gameisproceeding ? false : true);
-                Console.WriteLine(gameisproceeding);
             }
 
             // Jump when you press space (Still not finished)
             if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
-                circle.ApplyLinearImpulse(new Vector2(0, 10));
+                circle.ApplyLinearImpulse(new Vector2(0, -2));
 
             _oldKeyState = state;
 
@@ -212,12 +216,14 @@ namespace PhysicsTesting
             float length = Vector2.Distance(oldMousePos, mousePos);
             float width = 6;
 
-            if (length > 0)
+            if(totallength > 1000)
             {
-                Vector2 origin = new Vector2(length / 2, width / 2);
+                return;
+            }
 
-                //Body box = world.CreateEllipse(ConvertUnits.ToSimUnits(length),
-                //  ConvertUnits.ToSimUnits(width), 10, 1f, oldMousePos, angle);
+            if( length > 0)
+            {   
+                Vector2 origin = new Vector2(length / 2, width / 2);
 
                 Body box = world.CreateRectangle(ConvertUnits.ToSimUnits(length),
                   ConvertUnits.ToSimUnits(width), 10f, oldMousePos, angle);
@@ -239,6 +245,8 @@ namespace PhysicsTesting
 
                 Line newLine = new Line(pixel, oldMousePos, mousePos, width, length, angle, Color.White, origin);
                 lines.Add(newLine);
+
+                totallength += length;
             }
         }
 
@@ -256,12 +264,12 @@ namespace PhysicsTesting
 
             foreach (Obstacle obstacle in obstacles)
             {
-                spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
+                //spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
             }
 
             foreach (Line line in lines)
             {
-                line.Draw(spriteBatch);
+                //line.Draw(spriteBatch);
             }
 
             var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
