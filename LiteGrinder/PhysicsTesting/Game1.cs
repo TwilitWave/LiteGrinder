@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using LiteGrinder;
+using System.Diagnostics;
 
 namespace PhysicsTesting
 {
@@ -20,6 +21,7 @@ namespace PhysicsTesting
 
         //circle
         private Body circle;
+        private Fixture circleSensor;
         private Vector2 circleOrigin;
 
         private World world;
@@ -101,6 +103,9 @@ namespace PhysicsTesting
             circle.SetRestitution(0.0f);
             circle.SetFriction(0.0f);
 
+            circleSensor = circle.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
+            circleSensor.IsSensor = true;
+
             Obstacle.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
 
@@ -124,6 +129,11 @@ namespace PhysicsTesting
         {
             HandleControls(gameTime);
             CollectableItem.UpdataCollactableItem(world);
+
+            circleSensor.OnCollision += (s, o, c) =>
+            {
+                return true;
+            };
 
             if (gameisproceeding)
                 world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1 / 30f));
@@ -172,7 +182,9 @@ namespace PhysicsTesting
 
             // Jump when you press space (Still not finished)
             if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
-                circle.ApplyLinearImpulse(new Vector2(0, -2));
+            {
+                circle.ApplyLinearImpulse(new Vector2(0, -3));
+            }
 
             _oldKeyState = state;
 
@@ -216,7 +228,7 @@ namespace PhysicsTesting
             float length = Vector2.Distance(oldMousePos, mousePos);
             float width = 6;
 
-            if(totallength > 1000)
+            if(totallength > 10000)
             {
                 return;
             }
