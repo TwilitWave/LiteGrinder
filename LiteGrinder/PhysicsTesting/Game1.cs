@@ -143,6 +143,7 @@ namespace PhysicsTesting
             HandleControls(gameTime);
             CollectableItem.UpdataCollactableItem(world);
 
+
             if (gameisproceeding)
                 world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1 / 30f));
             else
