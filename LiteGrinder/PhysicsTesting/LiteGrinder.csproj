@@ -56,11 +56,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Object\demoLevelTwo.cs" />
     <Compile Include="Object\CollectableItem.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="ConvertUnits.cs" />
-    <Compile Include="Object\Obstacle.cs" />
+    <Compile Include="Object\demoLevelOne.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
