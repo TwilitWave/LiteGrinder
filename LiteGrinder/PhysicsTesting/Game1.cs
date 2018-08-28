@@ -24,8 +24,8 @@ namespace PhysicsTesting
         private World world;
         private List<Body> boxes = new List<Body>();
         private List<Line> lines =  new List<Line>();
-        private List<Obstacle> obstacles = new List<Obstacle>();
         private Player player;
+        private List<demoLevelOne> obstacles = new List<demoLevelOne>();
 
         private Vector2 oldMousePos, mousePos;
         private Vector2 oldCamPos;
@@ -90,7 +90,7 @@ namespace PhysicsTesting
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), pixel, jumpForce);
-            Obstacle.CreateTestStage(obstacles, world, pixel);
+            demoLevelOne.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
 
         }
@@ -255,7 +255,7 @@ namespace PhysicsTesting
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
             player.Draw(spriteBatch);
 
-            foreach (Obstacle obstacle in obstacles)
+            foreach (demoLevelOne obstacle in obstacles)
             {
                 spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
             }
