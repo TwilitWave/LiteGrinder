@@ -1,12 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using PhysicsTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using tainicom.Aether.Physics2D.Collision.Shapes;
-using tainicom.Aether.Physics2D.Common;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Dynamics.Contacts;
 
@@ -19,8 +14,9 @@ namespace LiteGrinder
         private CollectableItem(World world)
         {
             Body body = world.CreateCircle(ConvertUnits.ToSimUnits(30), 2f, new Vector2(1f, 8f), BodyType.Static);
-            CircleShape circle = new CircleShape(ConvertUnits.ToSimUnits(30), 2f);
+            CircleShape circle = new CircleShape(ConvertUnits.ToSimUnits(30), 0f);
             Fixture fixture = body.CreateFixture(circle);
+            body.SetIsSensor(true);
             fixture.OnCollision += OnCollision;
         }
 
