@@ -26,7 +26,7 @@ namespace PhysicsTesting
 
         private List<Body> boxes = new List<Body>();
         private List<Line> lines =  new List<Line>();
-        private List<Obstacle> obstacles = new List<Obstacle>();
+        private List<demoLevelOne> obstacles = new List<demoLevelOne>();
 
         private Vector2 oldMousePos, mousePos;
         private KeyboardState _oldKeyState;
@@ -101,7 +101,7 @@ namespace PhysicsTesting
             circle.SetRestitution(0.0f);
             circle.SetFriction(0.0f);
 
-            Obstacle.CreateTestStage(obstacles, world, pixel);
+            demoLevelOne.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
 
         }
@@ -263,7 +263,7 @@ namespace PhysicsTesting
             spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(circle.Position), null, Color.Green, circle.Rotation, circleOrigin, new Vector2(0, 0), SpriteEffects.None, 0f);
 
 
-            foreach (Obstacle obstacle in obstacles)
+            foreach (demoLevelOne obstacle in obstacles)
             {
                 //spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
             }
