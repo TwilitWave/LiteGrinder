@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using LiteGrinder;
+using System.Diagnostics;
 
 namespace PhysicsTesting
 {
@@ -18,9 +19,16 @@ namespace PhysicsTesting
         SpriteBatch spriteBatch;
         bool gameisproceeding = true;
 
+        //Control variables
+        private float maxLength = 3000;
+        private float jumpForce = -18;
+
         //circle
         private Body circle;
+        private Fixture circleSensor;
         private Vector2 circleOrigin;
+        private bool isGrounded = false;
+        private double jumpCD = 0;
 
         private World world;
 
@@ -36,6 +44,7 @@ namespace PhysicsTesting
         private Vector2 cameraPosition;
         private Vector2 screenCenter;
         private Vector2 startPos = ConvertUnits.ToSimUnits(new Vector2(50,50));
+        private float totallength = 0;
 
         private DebugView debuginfo;
 
@@ -96,11 +105,22 @@ namespace PhysicsTesting
             circleOrigin = new Vector2(pixel.Width / 2f, pixel.Height / 2f);
             Vector2 circlePos = startPos;
 
-            circle = world.CreateCircle(ConvertUnits.ToSimUnits(30), 2f, circlePos, BodyType.Dynamic);
+            circle = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, circlePos, BodyType.Dynamic);
             circle.SetRestitution(0.0f);
-            circle.SetFriction(0.0f);
+            circle.SetFriction(1f);
+
+            circleSensor = circle.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
+            circleSensor.IsSensor = true;
+
+            circleSensor.OnCollision += (fixtureA, fixtureB, contact) =>
+            {
+                isGrounded = true;
+
+                return true;
+            };
 
             Obstacle.CreateTestStage(obstacles, world, pixel);
+            CollectableItem.CreateCorrectableItem(world);
 
         }
 
@@ -121,6 +141,8 @@ namespace PhysicsTesting
         protected override void Update(GameTime gameTime)
         {
             HandleControls(gameTime);
+            CollectableItem.UpdataCollactableItem(world);
+
 
             if (gameisproceeding)
                 world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1 / 30f));
@@ -138,6 +160,7 @@ namespace PhysicsTesting
             if (mousePos == Vector2.Zero)
             {
                 mousePos = new Vector2(mouseState.X, mouseState.Y);
+                oldMousePos = mousePos;
             }
 
             if (state.IsKeyDown(Keys.Escape))
@@ -146,9 +169,11 @@ namespace PhysicsTesting
             // Reset scene
             if (state.IsKeyDown(Keys.R))
             {
+                CollectableItem.CreateCorrectableItem(world);
                 circle.Position = startPos;
                 circle.LinearVelocity = new Vector2(0, -1f);
                 circle.AngularVelocity = 0;
+                totallength = 0;
                 if (boxes.Count > 0)
                 {
                     foreach (Body b in boxes)
@@ -163,12 +188,16 @@ namespace PhysicsTesting
             if (state.IsKeyDown(Keys.W) && _oldKeyState.IsKeyUp(Keys.W))
             {
                 gameisproceeding = (gameisproceeding ? false : true);
-                Console.WriteLine(gameisproceeding);
             }
 
             // Jump when you press space (Still not finished)
-            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
-                circle.ApplyLinearImpulse(new Vector2(0, 10));
+            jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space) && isGrounded && (jumpCD >= 500))
+            {
+                jumpCD = 0;
+                isGrounded = false;
+                circle.ApplyLinearImpulse(new Vector2(0, jumpForce));
+            }
 
             _oldKeyState = state;
 
@@ -212,19 +241,21 @@ namespace PhysicsTesting
             float length = Vector2.Distance(oldMousePos, mousePos);
             float width = 6;
 
-            if (length > 0)
+            if(totallength > maxLength)
             {
-                Vector2 origin = new Vector2(length / 2, width / 2);
+                return;
+            }
 
-                //Body box = world.CreateEllipse(ConvertUnits.ToSimUnits(length),
-                //  ConvertUnits.ToSimUnits(width), 10, 1f, oldMousePos, angle);
+            if( length > 0)
+            {   
+                Vector2 origin = new Vector2(length / 2, width / 2);
 
                 Body box = world.CreateRectangle(ConvertUnits.ToSimUnits(length),
                   ConvertUnits.ToSimUnits(width), 10f, oldMousePos, angle);
 
                 box.BodyType = BodyType.Static;
                 box.SetRestitution(0f);
-                box.SetFriction(0f);
+                box.SetFriction(1f);
 
                 float neg1 = 1;
                 float neg2 = 1;
@@ -239,6 +270,8 @@ namespace PhysicsTesting
 
                 Line newLine = new Line(pixel, oldMousePos, mousePos, width, length, angle, Color.White, origin);
                 lines.Add(newLine);
+
+                totallength += length;
             }
         }
 
@@ -256,12 +289,12 @@ namespace PhysicsTesting
 
             foreach (Obstacle obstacle in obstacles)
             {
-                spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
+                //spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
             }
 
             foreach (Line line in lines)
             {
-                line.Draw(spriteBatch);
+                //line.Draw(spriteBatch);
             }
 
             var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
