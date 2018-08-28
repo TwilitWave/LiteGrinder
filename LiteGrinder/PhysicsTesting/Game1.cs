@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using LiteGrinder;
+using System.Diagnostics;
 
 namespace PhysicsTesting
 {
@@ -18,9 +19,16 @@ namespace PhysicsTesting
         SpriteBatch spriteBatch;
         bool gameisproceeding = true;
 
+        //Control variables
+        private float maxLength = 3000;
+        private float jumpForce = -18;
+
         //circle
         private Body circle;
+        private Fixture circleSensor;
         private Vector2 circleOrigin;
+        private bool isGrounded = false;
+        private double jumpCD = 0;
 
         private World world;
 
@@ -97,9 +105,19 @@ namespace PhysicsTesting
             circleOrigin = new Vector2(pixel.Width / 2f, pixel.Height / 2f);
             Vector2 circlePos = startPos;
 
-            circle = world.CreateCircle(ConvertUnits.ToSimUnits(30), 2f, circlePos, BodyType.Dynamic);
+            circle = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, circlePos, BodyType.Dynamic);
             circle.SetRestitution(0.0f);
-            circle.SetFriction(0.0f);
+            circle.SetFriction(1f);
+
+            circleSensor = circle.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
+            circleSensor.IsSensor = true;
+
+            circleSensor.OnCollision += (fixtureA, fixtureB, contact) =>
+            {
+                isGrounded = true;
+
+                return true;
+            };
 
             Obstacle.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
@@ -151,6 +169,7 @@ namespace PhysicsTesting
             // Reset scene
             if (state.IsKeyDown(Keys.R))
             {
+                CollectableItem.CreateCorrectableItem(world);
                 circle.Position = startPos;
                 circle.LinearVelocity = new Vector2(0, -1f);
                 circle.AngularVelocity = 0;
@@ -172,8 +191,13 @@ namespace PhysicsTesting
             }
 
             // Jump when you press space (Still not finished)
-            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
-                circle.ApplyLinearImpulse(new Vector2(0, -2));
+            jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space) && isGrounded && (jumpCD >= 500))
+            {
+                jumpCD = 0;
+                isGrounded = false;
+                circle.ApplyLinearImpulse(new Vector2(0, jumpForce));
+            }
 
             _oldKeyState = state;
 
@@ -217,7 +241,7 @@ namespace PhysicsTesting
             float length = Vector2.Distance(oldMousePos, mousePos);
             float width = 6;
 
-            if(totallength > 1000)
+            if(totallength > maxLength)
             {
                 return;
             }
@@ -231,7 +255,7 @@ namespace PhysicsTesting
 
                 box.BodyType = BodyType.Static;
                 box.SetRestitution(0f);
-                box.SetFriction(0f);
+                box.SetFriction(1f);
 
                 float neg1 = 1;
                 float neg2 = 1;
