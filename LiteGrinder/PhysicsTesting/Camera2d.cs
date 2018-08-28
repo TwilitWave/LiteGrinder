@@ -9,10 +9,12 @@ namespace PhysicsTesting
         // Borrowed some code from: http://www.david-amador.com/2009/10/xna-camera-2d-with-zoom-and-rotation/
         private Matrix transform;
         private Vector2 pos; // Camera Position
+        private Vector2 startPos;
 
-        public Camera2d()
+        public Camera2d(Vector2 startPos)
         {
-            pos = Vector2.Zero;
+            pos = startPos;
+            this.startPos = startPos;
         }
 
         // Get set position
@@ -21,6 +23,13 @@ namespace PhysicsTesting
             get { return pos; }
             set { pos = value; }
         }
+
+        // Reset position
+        public void Reset()
+        {
+            pos = startPos;
+        }
+
         public Matrix get_transformation(GraphicsDevice graphicsDevice)
         {
             transform =  Matrix.CreateTranslation(new Vector3(-pos.X, -pos.Y, 0)) *

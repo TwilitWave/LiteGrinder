@@ -80,8 +80,7 @@ namespace PhysicsTesting
             debuginfo.RemoveFlags(DebugViewFlags.Controllers);
 
             // Initialize camera controls
-            cam = new Camera2d();
-            cam.Pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f);
+            cam = new Camera2d(new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -142,6 +141,7 @@ namespace PhysicsTesting
             // Reset scene
             if (state.IsKeyDown(Keys.R))
             {
+                cam.Reset();
                 gameisproceeding = false;
                 CollectableItem.CreateCorrectableItem(world);
                 player.ResetPosition();
