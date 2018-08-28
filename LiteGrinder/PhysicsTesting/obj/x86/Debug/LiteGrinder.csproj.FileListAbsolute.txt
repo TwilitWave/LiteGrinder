@@ -143,7 +143,6 @@ C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\bin\Wi
 C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
 C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\bin\Windows\x86\Debug\SharpDX.XInput.xml
 C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
-C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\obj\x86\Debug\LiteGrinder.csprojAssemblyReference.cache
 C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\obj\x86\Debug\LiteGrinder.csproj.CoreCompileInputs.cache
 C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\obj\x86\Debug\LiteGrinder.csproj.CopyComplete
 C:\Users\u1116676\Documents\GitHub\LiteGrinder\LiteGrinder\PhysicsTesting\obj\x86\Debug\LiteGrinder.exe

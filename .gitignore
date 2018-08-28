@@ -328,3 +328,24 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+LiteGrinder/PhysicsTesting/obj/x86/Debug/LiteGrinder.pdb
+LiteGrinder/PhysicsTesting/obj/x86/Debug/LiteGrinder.exe
+LiteGrinder/PhysicsTesting/obj/x86/Debug/LiteGrinder.csprojAssemblyReference.cache
+LiteGrinder/PhysicsTesting/obj/x86/Debug/LiteGrinder.csproj.FileListAbsolute.txt
+LiteGrinder/PhysicsTesting/obj/x86/Debug/LiteGrinder.csproj.CoreCompileInputs.cache
+LiteGrinder/PhysicsTesting/Content/obj/Windows/DiagnosticsFont.mgcontent
+LiteGrinder/PhysicsTesting/Content/obj/Windows/32pix.mgcontent
+LiteGrinder/PhysicsTesting/Content/obj/Windows/1pixel.mgcontent
+LiteGrinder/PhysicsTesting/Content/obj/Windows/.mgcontent
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.XInput.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.XAudio2.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.MediaFoundation.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.DXGI.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.Direct3D9.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.Direct3D11.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.Direct2D1.xml
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/LiteGrinder.pdb
+LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/LiteGrinder.exe
+LiteGrinder/.vs/LiteGrinder/v15/Server/sqlite3/storage.ide-shm
+LiteGrinder/.vs/LiteGrinder/v15/.suo
