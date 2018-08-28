@@ -348,3 +348,4 @@ LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/SharpDX.Direct2D1.xml
 LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/LiteGrinder.pdb
 LiteGrinder/PhysicsTesting/bin/Windows/x86/Debug/LiteGrinder.exe
 LiteGrinder/.vs/LiteGrinder/v15/Server/sqlite3/storage.ide-shm
+*.ide-wal
