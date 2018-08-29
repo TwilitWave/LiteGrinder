@@ -17,20 +17,11 @@ namespace PhysicsTesting
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        bool gameisproceeding = true;
-
         //Control variables
         private float maxLength = 3000;
         private float jumpForce = -18;
-
-        //circle
-        private Body circle;
-        private Fixture circleSensor;
-        private Vector2 circleOrigin;
-        private bool isGrounded = false;
-        private double jumpCD = 0;
+        private bool gameisproceeding = false;
+        private bool cameraFollow = false;
 
         //deletesencer
         private Body delete;
@@ -38,12 +29,13 @@ namespace PhysicsTesting
         private List<Body> removeBodies = new List<Body>();
 
         private World world;
-
         private List<Body> boxes = new List<Body>();
         private List<Line> lines =  new List<Line>();
-        private List<Obstacle> obstacles = new List<Obstacle>();
+        private Player player;
+        private List<demoLevelOne> obstacles = new List<demoLevelOne>();
 
         private Vector2 oldMousePos, mousePos;
+<<<<<<< HEAD
         private KeyboardState keystate, oldKeyState;
         private MouseState mouseState, oldMouseState;
 
@@ -54,20 +46,26 @@ namespace PhysicsTesting
         private Vector2 cameraPosition;
         private Vector2 screenCenter;
         private Vector2 startPos = ConvertUnits.ToSimUnits(new Vector2(50,50));
+=======
+        private Vector2 oldCamPos;
+        private KeyboardState _oldKeyState;
+>>>>>>> master
         private float totallength = 0;
 
         private DebugView debuginfo;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
         private Texture2D pixel;
-
         private SpriteFont font;
+        private Camera2d cam;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             // Screen Resolution
-            graphics.PreferredBackBufferHeight = 1080;
             graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
             
             Content.RootDirectory = "Content";
         }
@@ -102,9 +100,7 @@ namespace PhysicsTesting
             debuginfo.RemoveFlags(DebugViewFlags.Controllers);
 
             // Initialize camera controls
-            view = Matrix.Identity;
-            cameraPosition = Vector2.Zero;
-            screenCenter = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f);
+            cam = new Camera2d(new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
 
             projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
             ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
@@ -114,25 +110,9 @@ namespace PhysicsTesting
 
             pixel = Content.Load<Texture2D>("1pixel");
 
-            //Player Circle
-            circleOrigin = new Vector2(pixel.Width / 2f, pixel.Height / 2f);
-            Vector2 circlePos = startPos;
-
-            circle = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, circlePos, BodyType.Dynamic);
-            circle.SetRestitution(0.0f);
-            circle.SetFriction(1f);
-
-            circleSensor = circle.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
-            circleSensor.IsSensor = true;
-
-            circleSensor.OnCollision += (fixtureA, fixtureB, contact) =>
-            {
-                isGrounded = true;
-
-                return true;
-            };
-
-            Obstacle.CreateTestStage(obstacles, world, pixel);
+            //Object Initializations
+            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), pixel, jumpForce);
+            demoLevelOne.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
         }
 
@@ -155,6 +135,8 @@ namespace PhysicsTesting
             HandleControls(gameTime);
             CollectableItem.UpdataCollactableItem(world);
 
+            if (cameraFollow)
+                cam.Pos = ConvertUnits.ToDisplayUnits(player.GetBody().Position);
 
             if (gameisproceeding)
                 world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1 / 30f));
@@ -188,10 +170,10 @@ namespace PhysicsTesting
             // Reset scene
             if (keystate.IsKeyDown(Keys.R))
             {
+                cam.Reset();
+                gameisproceeding = false;
                 CollectableItem.CreateCorrectableItem(world);
-                circle.Position = startPos;
-                circle.LinearVelocity = new Vector2(0, -1f);
-                circle.AngularVelocity = 0;
+                player.ResetPosition();
                 totallength = 0;
                 if (boxes.Count > 0)
                 {
@@ -209,12 +191,16 @@ namespace PhysicsTesting
                 gameisproceeding = (gameisproceeding ? false : true);
             }
 
+<<<<<<< HEAD
             jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (keystate.IsKeyDown(Keys.Space) && oldKeyState.IsKeyUp(Keys.Space) && isGrounded && (jumpCD >= 500))
+=======
+            // Jump when you press space
+            player.jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
+>>>>>>> master
             {
-                jumpCD = 0;
-                isGrounded = false;
-                circle.ApplyLinearImpulse(new Vector2(0, jumpForce));
+                player.Jump();
             }
 
             if (keystate.IsKeyDown(Keys.O))
@@ -226,9 +212,7 @@ namespace PhysicsTesting
             // Reset just player circle
             if (keystate.IsKeyDown(Keys.S))
             {
-                circle.Position = startPos;
-                circle.LinearVelocity = new Vector2(0, -1f);
-                circle.AngularVelocity = 0;
+                player.ResetPosition();
             }
 
             // Drawing
@@ -271,6 +255,7 @@ namespace PhysicsTesting
             }
 
             // Move camera - Only moving the sprites ATM
+<<<<<<< HEAD
             if (keystate.IsKeyDown(Keys.Left))
                 cameraPosition.X += 1.5f;
             if (keystate.IsKeyDown(Keys.Right))
@@ -283,12 +268,23 @@ namespace PhysicsTesting
 
             oldKeyState = keystate;
             oldMouseState = mouseState;
+=======
+            if (state.IsKeyDown(Keys.Left))
+                cam.Pos += new Vector2(-4f,0);
+            if (state.IsKeyDown(Keys.Right))
+                cam.Pos += new Vector2(4f, 0);
+            if (state.IsKeyDown(Keys.Up))
+                cam.Pos += new Vector2(0f, -4f);
+            if (state.IsKeyDown(Keys.Down))
+                cam.Pos += new Vector2(0f, 4f);
+>>>>>>> master
         }
 
         private void MouseDrawing(MouseState mouseState ,MouseState oldMousState)
         {
             oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
             mousePos = new Vector2(mouseState.X, mouseState.Y);
+            var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
 
             float angle = (float)Math.Atan2(mousePos.Y - oldMousePos.Y, mousePos.X - oldMousePos.X);
             float length = Vector2.Distance(oldMousePos, mousePos);
@@ -317,10 +313,11 @@ namespace PhysicsTesting
 
                 Vector2 boxPos = ConvertUnits.ToSimUnits(oldMousePos + ((mousePos - oldMousePos) / 2));
                 box.Position = boxPos - ConvertUnits.ToSimUnits(new Vector2(neg2 * (width / 2), neg1 * (-(width / 2))));
+                box.Position += ConvertUnits.ToSimUnits(camOffset);
 
                 boxes.Add(box);
 
-                Line newLine = new Line(pixel, oldMousePos, mousePos, width, length, angle, Color.White, origin);
+                Line newLine = new Line(pixel, oldMousePos + camOffset, mousePos, width, length, angle, Color.White, origin);
                 lines.Add(newLine);
 
                 totallength += length;
@@ -335,21 +332,26 @@ namespace PhysicsTesting
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, view);
-            spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(circle.Position), null, Color.Green, circle.Rotation, circleOrigin, new Vector2(0, 0), SpriteEffects.None, 0f);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
+            player.Draw(spriteBatch);
 
-
-            foreach (Obstacle obstacle in obstacles)
+            foreach (demoLevelOne obstacle in obstacles)
             {
-                //spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
+                spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
             }
 
             foreach (Line line in lines)
             {
-                //line.Draw(spriteBatch);
+                line.Draw(spriteBatch);
             }
 
+<<<<<<< HEAD
             debuginfo.RenderDebugData(ref projection);
+=======
+            var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
+             ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
+            debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
+>>>>>>> master
             spriteBatch.End();
 
             base.Draw(gameTime);
