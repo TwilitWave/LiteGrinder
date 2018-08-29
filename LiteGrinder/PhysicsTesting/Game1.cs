@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using LiteGrinder;
 using System.Diagnostics;
+using tainicom.Aether.Physics2D.Collision.Shapes;
+using tainicom.Aether.Physics2D.Dynamics.Joints;
 
 namespace PhysicsTesting
 {
@@ -30,6 +32,11 @@ namespace PhysicsTesting
         private bool isGrounded = false;
         private double jumpCD = 0;
 
+        //deletesencer
+        private Body delete;
+        private Fixture deleteSensor;
+        private List<Body> removeBodies = new List<Body>();
+
         private World world;
 
         private List<Body> boxes = new List<Body>();
@@ -37,7 +44,10 @@ namespace PhysicsTesting
         private List<Obstacle> obstacles = new List<Obstacle>();
 
         private Vector2 oldMousePos, mousePos;
-        private KeyboardState _oldKeyState;
+        private KeyboardState keystate, oldKeyState;
+        private MouseState mouseState, oldMouseState;
+
+        private Matrix projection;
 
         // Simple camera controls
         private Matrix view;
@@ -96,6 +106,9 @@ namespace PhysicsTesting
             cameraPosition = Vector2.Zero;
             screenCenter = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f);
 
+            projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
+            ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -121,7 +134,6 @@ namespace PhysicsTesting
 
             Obstacle.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
-
         }
 
         /// <summary>
@@ -149,13 +161,20 @@ namespace PhysicsTesting
             else
                 world.Step(0);
 
+            for (int i = 0; i < removeBodies.Count; i++)
+            {
+                world.Remove(removeBodies[i]);
+            }
+
+            removeBodies.Clear();
+
             base.Update(gameTime);
         }
 
         private void HandleControls(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
-            MouseState mouseState = Mouse.GetState();
+            keystate = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
             if (mousePos == Vector2.Zero)
             {
@@ -163,11 +182,11 @@ namespace PhysicsTesting
                 oldMousePos = mousePos;
             }
 
-            if (state.IsKeyDown(Keys.Escape))
+            if (keystate.IsKeyDown(Keys.Escape))
                 Exit();
 
             // Reset scene
-            if (state.IsKeyDown(Keys.R))
+            if (keystate.IsKeyDown(Keys.R))
             {
                 CollectableItem.CreateCorrectableItem(world);
                 circle.Position = startPos;
@@ -185,24 +204,27 @@ namespace PhysicsTesting
                 }
             }
 
-            if (state.IsKeyDown(Keys.W) && _oldKeyState.IsKeyUp(Keys.W))
+            if (keystate.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
             {
                 gameisproceeding = (gameisproceeding ? false : true);
             }
 
-            // Jump when you press space (Still not finished)
             jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space) && isGrounded && (jumpCD >= 500))
+            if (keystate.IsKeyDown(Keys.Space) && oldKeyState.IsKeyUp(Keys.Space) && isGrounded && (jumpCD >= 500))
             {
                 jumpCD = 0;
                 isGrounded = false;
                 circle.ApplyLinearImpulse(new Vector2(0, jumpForce));
             }
 
-            _oldKeyState = state;
+            if (keystate.IsKeyDown(Keys.O))
+                circle.ApplyTorque(-10);
+
+            if (keystate.IsKeyDown(Keys.P))
+                circle.ApplyTorque(10);
 
             // Reset just player circle
-            if (state.IsKeyDown(Keys.S))
+            if (keystate.IsKeyDown(Keys.S))
             {
                 circle.Position = startPos;
                 circle.LinearVelocity = new Vector2(0, -1f);
@@ -212,29 +234,60 @@ namespace PhysicsTesting
             // Drawing
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                MouseDrawing(mouseState);
+                MouseDrawing(mouseState, oldMouseState);
             }
 
-            if (mouseState.LeftButton == ButtonState.Released)
+            if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Released)
             {
-                mousePos = new Vector2(0, 0);
+                delete = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, ConvertUnits.ToSimUnits(mousePos), BodyType.Static);
+                deleteSensor = delete.CreateCircle(ConvertUnits.ToSimUnits(30), 10f);
+                deleteSensor.IsSensor = true;
+
+                deleteSensor.OnCollision += (fixtureA, fixtureB, contact) =>
+                {
+                    Body body2 = fixtureB.Body;
+                    if (!removeBodies.Contains(body2))
+                        removeBodies.Add(body2);
+                    return true;
+                };
+                for (int i = 0; i < removeBodies.Count; i++)
+                {
+                    world.Remove(removeBodies[i]);
+                }
+                removeBodies.Clear();
+            }
+
+            if (mouseState.RightButton == ButtonState.Released)
+            {
+                if (world.BodyList.Contains(delete))
+                {
+                    world.Remove(delete);
+                }
+            }
+
+            if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)
+            {
+                mousePos = new Vector2(mouseState.X, mouseState.Y);
             }
 
             // Move camera - Only moving the sprites ATM
-            if (state.IsKeyDown(Keys.Left))
+            if (keystate.IsKeyDown(Keys.Left))
                 cameraPosition.X += 1.5f;
-            if (state.IsKeyDown(Keys.Right))
+            if (keystate.IsKeyDown(Keys.Right))
                 cameraPosition.X -= 1.5f;
-            if (state.IsKeyDown(Keys.Up))
+            if (keystate.IsKeyDown(Keys.Up))
                 cameraPosition.Y += 1.5f;
-            if (state.IsKeyDown(Keys.Down))
+            if (keystate.IsKeyDown(Keys.Down))
                 cameraPosition.Y -= 1.5f;
             view = Matrix.CreateTranslation(new Vector3(cameraPosition -  screenCenter, 0f)) * Matrix.CreateTranslation(new Vector3(screenCenter, 0f));
+
+            oldKeyState = keystate;
+            oldMouseState = mouseState;
         }
 
-        private void MouseDrawing(MouseState mouseState)
+        private void MouseDrawing(MouseState mouseState ,MouseState oldMousState)
         {
-            oldMousePos = mousePos;
+            oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
             mousePos = new Vector2(mouseState.X, mouseState.Y);
 
             float angle = (float)Math.Atan2(mousePos.Y - oldMousePos.Y, mousePos.X - oldMousePos.X);
@@ -253,7 +306,7 @@ namespace PhysicsTesting
                 Body box = world.CreateRectangle(ConvertUnits.ToSimUnits(length),
                   ConvertUnits.ToSimUnits(width), 10f, oldMousePos, angle);
 
-                box.BodyType = BodyType.Static;
+                box.BodyType = BodyType.Kinematic;
                 box.SetRestitution(0f);
                 box.SetFriction(1f);
 
@@ -261,7 +314,6 @@ namespace PhysicsTesting
                 float neg2 = 1;
                 neg1 = (mousePos.X - oldMousePos.X < 0) ? -1 : 1;
                 neg2 = (mousePos.Y - oldMousePos.Y < 0) ? -1 : 1;
-
 
                 Vector2 boxPos = ConvertUnits.ToSimUnits(oldMousePos + ((mousePos - oldMousePos) / 2));
                 box.Position = boxPos - ConvertUnits.ToSimUnits(new Vector2(neg2 * (width / 2), neg1 * (-(width / 2))));
@@ -297,8 +349,6 @@ namespace PhysicsTesting
                 //line.Draw(spriteBatch);
             }
 
-            var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
-             ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
             debuginfo.RenderDebugData(ref projection);
             spriteBatch.End();
 
