@@ -70,7 +70,7 @@ namespace PhysicsTesting
         // Jump command
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, ConvertUnits.ToDisplayUnits(body.Position), null, Color.Green, body.Rotation, circleOrigin, new Vector2(20, 20), SpriteEffects.None, 0f);
+            spriteBatch.Draw(sprite, ConvertUnits.ToDisplayUnits(body.Position), null, Color.White, body.Rotation, circleOrigin, new Vector2(1f/32f, 1f/32f), SpriteEffects.None, 0f);
         }
     }
 }

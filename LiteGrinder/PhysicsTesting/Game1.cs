@@ -88,7 +88,7 @@ namespace PhysicsTesting
             pixel = Content.Load<Texture2D>("1pixel");
 
             //Object Initializations
-            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), pixel, jumpForce);
+            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Dude_2048"), jumpForce);
             demoLevelOne.CreateTestStage(obstacles, world, pixel);
             CollectableItem.CreateCorrectableItem(world);
 
