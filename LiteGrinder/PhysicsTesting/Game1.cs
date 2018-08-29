@@ -29,7 +29,9 @@ namespace PhysicsTesting
 
         private Vector2 oldMousePos, mousePos;
         private Vector2 oldCamPos;
-        private KeyboardState _oldKeyState;
+        private KeyboardState keyState, oldKeyState;
+        private MouseState mouseState, oldMouseState;
+
         private float totallength = 0;
 
         private DebugView debuginfo;
@@ -126,8 +128,8 @@ namespace PhysicsTesting
 
         private void HandleControls(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
-            MouseState mouseState = Mouse.GetState();
+            keyState = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
             if (mousePos == Vector2.Zero)
             {
@@ -135,11 +137,11 @@ namespace PhysicsTesting
                 oldMousePos = mousePos;
             }
 
-            if (state.IsKeyDown(Keys.Escape))
+            if (keyState.IsKeyDown(Keys.Escape))
                 Exit();
 
             // Reset scene
-            if (state.IsKeyDown(Keys.R))
+            if (keyState.IsKeyDown(Keys.R))
             {
                 cam.Reset();
                 gameisproceeding = false;
@@ -157,22 +159,20 @@ namespace PhysicsTesting
                 }
             }
 
-            if (state.IsKeyDown(Keys.W) && _oldKeyState.IsKeyUp(Keys.W))
+            if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
             {
                 gameisproceeding = (gameisproceeding ? false : true);
             }
 
             // Jump when you press space
             player.jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
+            if (keyState.IsKeyDown(Keys.Space) && oldKeyState.IsKeyUp(Keys.Space))
             {
                 player.Jump();
             }
 
-            _oldKeyState = state;
-
             // Reset just player circle
-            if (state.IsKeyDown(Keys.S))
+            if (keyState.IsKeyDown(Keys.S))
             {
                 player.ResetPosition();
             }
@@ -180,28 +180,32 @@ namespace PhysicsTesting
             // Drawing
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                MouseDrawing(mouseState);
+                MouseDrawing(mouseState,oldMouseState);
             }
 
             if (mouseState.LeftButton == ButtonState.Released)
             {
-                mousePos = new Vector2(0, 0);
+                //mousePos = new Vector2(0, 0);
             }
 
             // Move camera - Only moving the sprites ATM
-            if (state.IsKeyDown(Keys.Left))
+            if (keyState.IsKeyDown(Keys.Left))
                 cam.Pos += new Vector2(-4f,0);
-            if (state.IsKeyDown(Keys.Right))
+            if (keyState.IsKeyDown(Keys.Right))
                 cam.Pos += new Vector2(4f, 0);
-            if (state.IsKeyDown(Keys.Up))
+            if (keyState.IsKeyDown(Keys.Up))
                 cam.Pos += new Vector2(0f, -4f);
-            if (state.IsKeyDown(Keys.Down))
+            if (keyState.IsKeyDown(Keys.Down))
                 cam.Pos += new Vector2(0f, 4f);
+
+            // memorize the state of mouse and keyboard 1 update before
+            oldKeyState = keyState;
+            oldMouseState = mouseState;
         }
 
-        private void MouseDrawing(MouseState mouseState)
-        {
-            oldMousePos = mousePos;
+        private void MouseDrawing(MouseState mouseState, MouseState oldMouseState)
+        {   
+            oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
             mousePos = new Vector2(mouseState.X, mouseState.Y);
             var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
 
