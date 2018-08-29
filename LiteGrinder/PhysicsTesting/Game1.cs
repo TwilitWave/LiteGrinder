@@ -188,6 +188,11 @@ namespace PhysicsTesting
                 mousePos = new Vector2(0, 0);
             }
 
+            if (oldCamPos != cam.Pos)
+            {
+                oldCamPos = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
+            }
+
             // Move camera - Only moving the sprites ATM
             if (state.IsKeyDown(Keys.Left))
                 cam.Pos += new Vector2(-4f,0);
@@ -204,6 +209,9 @@ namespace PhysicsTesting
             oldMousePos = mousePos;
             mousePos = new Vector2(mouseState.X, mouseState.Y);
             var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
+            var deltaCam = camOffset - oldCamPos;
+            Debug.Print(deltaCam.ToString());
+            oldMousePos += deltaCam;
 
             float angle = (float)Math.Atan2(mousePos.Y - oldMousePos.Y, mousePos.X - oldMousePos.X);
             float length = Vector2.Distance(oldMousePos, mousePos);
