@@ -19,6 +19,13 @@ namespace PhysicsTesting
         private Texture2D sprite1;
         private Texture2D sprite2;
         public double jumpCD = 0;
+        
+        // Amount of time between frames
+        private TimeSpan frameInterval = new TimeSpan(0, 0, 0, 0, 30);
+        // Time passed since last frame
+        private TimeSpan nextFrame;
+        private int spriteNum = 0;
+
 
         public Player(World world, Vector2 startPos, Texture2D sprite1, Texture2D sprite2, float jumpForce)
         {
@@ -49,6 +56,7 @@ namespace PhysicsTesting
         public void ResetPosition()
         {
             body.Position = startPos;
+            body.Rotation = 0;
             body.LinearVelocity = new Vector2(0, -1f);
             body.AngularVelocity = 0;
         }
@@ -69,13 +77,6 @@ namespace PhysicsTesting
                 body.ApplyLinearImpulse(new Vector2(0, jumpForce));
             }
         }
-
-
-        // Amount of time between frames
-        private TimeSpan frameInterval = new TimeSpan(0,0,0,0,30);
-        // Time passed since last frame
-        private TimeSpan nextFrame;
-        private int spriteNum = 0;
 
         // Draw Player
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

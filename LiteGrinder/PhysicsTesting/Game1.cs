@@ -228,6 +228,15 @@ namespace PhysicsTesting
                 cam.Pos += new Vector2(0f, -4f);
             if (keyState.IsKeyDown(Keys.Down))
                 cam.Pos += new Vector2(0f, 4f);
+            
+            if (keyState.IsKeyDown(Keys.Z))
+            {
+                cam.Zoom += .01f;
+            }
+            if (keyState.IsKeyDown(Keys.X))
+            {
+                cam.Zoom -= .01f;
+            }
 
             // memorize the state of mouse and keyboard 1 update before
             oldKeyState = keyState;
