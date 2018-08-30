@@ -102,15 +102,10 @@ namespace PhysicsTesting
             pixel = Content.Load<Texture2D>("1pixel");
             wallTile = Content.Load<Texture2D>("wallTile");
 
-<<<<<<< HEAD
-            //Object Initializations
-            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Dude_2048"), jumpForce);
-=======
-            background = Content.Load<Texture2D>("labBackground");
->>>>>>> c865743907ba2c9c506db6d9ea1e312cee4d0b9d
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
+            background = Content.Load<Texture2D>("labBackground");
             InitialMap();
         }
 
@@ -305,20 +300,13 @@ namespace PhysicsTesting
                 line.Draw(spriteBatch);
             }
 
-<<<<<<< HEAD
-            foreach (LiteGrinder.Object.MapObject mapobject in mapobjects){
-                mapobject.Draw(spriteBatch, pixel);
-            }
-
-=======
->>>>>>> c865743907ba2c9c506db6d9ea1e312cee4d0b9d
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
             spriteBatch.End();
 
             
             // Linear wrap drawing for the obstacles
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
-            foreach (LiteGrinder.Object.Object o in objects)
+            foreach (LiteGrinder.Object.MapObject o in mapobjects)
             {
                 o.Draw(spriteBatch, wallTile);
             }
