@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using LiteGrinder;
 using System.Diagnostics;
+using LiteGrinder.Object;
 
 namespace PhysicsTesting
 {
@@ -14,21 +15,19 @@ namespace PhysicsTesting
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
-    {
+    { 
         //Control variables
         private float maxLength = 3000;
         private float jumpForce = -18;
         private bool gameisproceeding = false;
-        private bool cameraFollow = false;
+        private bool cameraFollow = true;
 
         private World world;
         private List<Body> boxes = new List<Body>();
         private List<Line> lines =  new List<Line>();
         private Player player;
-        private List<demoLevelOne> obstacles = new List<demoLevelOne>();
 
         private Vector2 oldMousePos, mousePos;
-        private Vector2 oldCamPos;
         private KeyboardState keyState, oldKeyState;
         private MouseState mouseState, oldMouseState;
 
@@ -37,10 +36,16 @@ namespace PhysicsTesting
         private DebugView debuginfo;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+        private Matrix projection;
 
         private Texture2D pixel;
         private SpriteFont font;
         private Camera2d cam;
+
+        //Map objects
+        private List<LiteGrinder.Object.Object> objects = new List<LiteGrinder.Object.Object>();
+        private CollectableItem collectableitem = new CollectableItem();
+        private Block block = new Block();
 
         public Game1()
         {
@@ -81,6 +86,10 @@ namespace PhysicsTesting
             debuginfo.AppendFlags(DebugViewFlags.Shape);
             debuginfo.RemoveFlags(DebugViewFlags.Controllers);
 
+            //Something about Projection
+            projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
+            ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
+
             // Initialize camera controls
             cam = new Camera2d(new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
 
@@ -91,9 +100,15 @@ namespace PhysicsTesting
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), pixel, jumpForce);
-            demoLevelOne.CreateTestStage(obstacles, world, pixel);
-            CollectableItem.CreateCorrectableItem(world);
 
+            InitialMap();
+        }
+
+        private void InitialMap()
+        {
+            demoLevelOne.CreateTestStage(world, pixel);
+            objects.Add(collectableitem);
+            objects.Add(block);
         }
 
         /// <summary>
@@ -113,7 +128,10 @@ namespace PhysicsTesting
         protected override void Update(GameTime gameTime)
         {
             HandleControls(gameTime);
-            CollectableItem.UpdataCollactableItem(world);
+            foreach (LiteGrinder.Object.Object o in objects)
+            {
+                o.Update(world);
+            }
 
             if (cameraFollow)
                 cam.Pos = ConvertUnits.ToDisplayUnits(player.GetBody().Position);
@@ -145,7 +163,6 @@ namespace PhysicsTesting
             {
                 cam.Reset();
                 gameisproceeding = false;
-                CollectableItem.CreateCorrectableItem(world);
                 player.ResetPosition();
                 totallength = 0;
                 if (boxes.Count > 0)
@@ -183,9 +200,13 @@ namespace PhysicsTesting
                 MouseDrawing(mouseState,oldMouseState);
             }
 
-            if (mouseState.LeftButton == ButtonState.Released)
+            if (mouseState.RightButton == ButtonState.Pressed)
             {
-                //mousePos = new Vector2(0, 0);
+            }
+
+            if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)
+            {
+               mousePos = new Vector2(0, 0);
             }
 
             // Move camera - Only moving the sprites ATM
@@ -259,18 +280,15 @@ namespace PhysicsTesting
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
             player.Draw(spriteBatch);
 
-            foreach (demoLevelOne obstacle in obstacles)
-            {
-                spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
-            }
-
             foreach (Line line in lines)
             {
                 line.Draw(spriteBatch);
             }
 
-            var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
-             ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
+            foreach (LiteGrinder.Object.Object o in objects){
+                o.Draw(spriteBatch, pixel);
+            }
+
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
             spriteBatch.End();
 

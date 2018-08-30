@@ -1,41 +1,26 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LiteGrinder.Object;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicsTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace LiteGrinder
 {
     class demoLevelOne
     {
-        public Body body;
-        public Vector2 Origin;
-        public float width, height;
-
-        public demoLevelOne(World world, Vector2 position, float width, float height, float density, float rotation, BodyType bodytype, Texture2D texture2d, List<demoLevelOne> obstacles)
+        public static void CreateTestStage(World world, Texture2D texture2d)
         {
-            this.Origin = new Vector2(texture2d.Width / 2f, texture2d.Height / 2f);
-            this.body = world.CreateRectangle(width, height, density, position, rotation, bodytype);
-            this.width = ConvertUnits.ToDisplayUnits(width);
-            this.height = ConvertUnits.ToDisplayUnits(height);
-            body.SetRestitution(0.2f);
-            body.SetFriction(0.5f);
-            obstacles.Add(this);
-        }
+            new Block(world, new Vector2(0f, 3f), ConvertUnits.ToSimUnits(300), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d);
+            new Block(world, new Vector2(4f, 1f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(800), 1f, 0, BodyType.Static, texture2d);
+            new Block(world, new Vector2(10f, 4f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d);
+            new Block(world, new Vector2(10f, 7f), ConvertUnits.ToSimUnits(500), ConvertUnits.ToSimUnits(100), 1f, 0, BodyType.Static, texture2d);
+            new Block(world, new Vector2(15f, 0f), ConvertUnits.ToSimUnits(600), ConvertUnits.ToSimUnits(600), 1f, 0, BodyType.Static, texture2d);
+            new Block(world, new Vector2(15f, 10f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, texture2d);
+            new Block(world, new Vector2(19f, 6f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d);
 
-        public static void CreateTestStage(List<demoLevelOne> obstacles, World world, Texture2D texture2d)
-        {
-            new demoLevelOne(world, new Vector2(0f, 3f), ConvertUnits.ToSimUnits(300), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new demoLevelOne(world, new Vector2(4f, 1f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(800), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new demoLevelOne(world, new Vector2(10f, 4f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new demoLevelOne(world, new Vector2(10f, 7f), ConvertUnits.ToSimUnits(500), ConvertUnits.ToSimUnits(100), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new demoLevelOne(world, new Vector2(15f, 0f), ConvertUnits.ToSimUnits(600), ConvertUnits.ToSimUnits(600), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new demoLevelOne(world, new Vector2(15f, 10f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, texture2d, obstacles);
-            new demoLevelOne(world, new Vector2(19f, 6f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d, obstacles);
+            new CollectableItem(world, 30, 2f, new Vector2(1f, 8f), BodyType.Static);
+            new CollectableItem(world, 30, 2f, new Vector2(6f, 7f), BodyType.Static);
+            new CollectableItem(world, 30, 2f, new Vector2(4f, 2f), BodyType.Static);
         }
     }
 }

@@ -56,8 +56,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Object\Block.cs" />
+    <Compile Include="Object\Object.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Object\demoLevelTwo.cs" />
     <Compile Include="Object\CollectableItem.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Line.cs" />
