@@ -55,5 +55,10 @@ namespace LiteGrinder.MapObject
         {
 
         }
+
+        public override void Delete(World world)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

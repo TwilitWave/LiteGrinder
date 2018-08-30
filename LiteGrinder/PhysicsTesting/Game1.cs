@@ -113,7 +113,7 @@ namespace PhysicsTesting
 
         private void InitialMap()
         {
-            createStage.CreateTestStage(world);
+            createStage.DemoStage1(world);
             mapobjects.Add(collectableitem);
             mapobjects.Add(block);
         }
@@ -199,6 +199,31 @@ namespace PhysicsTesting
             if (keyState.IsKeyDown(Keys.S))
             {
                 player.ResetPosition();
+            }
+
+            if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
+            {
+                foreach(MapObject o in mapobjects)
+                {
+                    o.Delete(world);
+                }
+                createStage.DemoStage1(world);
+            }
+            if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
+            {
+                foreach (MapObject o in mapobjects)
+                {
+                    o.Delete(world);
+                }
+                createStage.DemoStage2(world);
+            }
+            if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
+            {
+                foreach (MapObject o in mapobjects)
+                {
+                    o.Delete(world);
+                }
+                createStage.DemoStage3(world);
             }
 
             // Drawing

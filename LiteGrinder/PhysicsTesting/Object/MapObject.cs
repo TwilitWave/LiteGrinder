@@ -14,5 +14,7 @@ namespace LiteGrinder.Object
         public abstract void Update(World world);
 
         public abstract void Draw(SpriteBatch spriteBatch);
+
+        public abstract void Delete(World world);
     }
 }

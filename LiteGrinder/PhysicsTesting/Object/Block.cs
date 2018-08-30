@@ -61,5 +61,14 @@ namespace LiteGrinder.Object
                 spriteBatch.Draw(texture, ConvertUnits.ToDisplayUnits(block.position), new Rectangle(0, 0, (int)block.width, (int)block.height), Color.White, 0, new Vector2(block.width / 2, block.height / 2), new Vector2(1, 1), SpriteEffects.None, 0f);
             }
         }
+
+        public override void Delete(World world)
+        {
+            foreach(Block b in blocks)
+            {
+                world.Remove(b.block);
+            }
+            blocks.Clear();
+        }
     }
 }

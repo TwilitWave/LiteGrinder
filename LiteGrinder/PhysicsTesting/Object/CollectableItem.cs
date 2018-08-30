@@ -73,5 +73,15 @@ namespace LiteGrinder
                 spriteBatch.Draw(texture, ConvertUnits.ToDisplayUnits(item.body.Position), null, Color.White, 0, new Vector2(texture.Width/2, texture.Height/2), new Vector2(1/20f, 1/20f), SpriteEffects.None, 0f);
             }
         }
+
+        public override void Delete(World world)
+        {
+            foreach (CollectableItem item in items)
+            {
+                world.Remove(item.body);
+            }
+            collectedItems.Clear();
+            items.Clear();
+        }
     }
 }
