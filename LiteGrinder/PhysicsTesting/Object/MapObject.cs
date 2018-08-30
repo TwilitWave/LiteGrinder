@@ -3,13 +3,13 @@ using tainicom.Aether.Physics2D.Dynamics;
 
 namespace LiteGrinder.Object
 {
-    abstract class Object
+    abstract class MapObject
     {
         private World world;
         private SpriteBatch spritBatch;
         private Texture2D texture;
 
-        public Object()
+        public MapObject()
         {
 
         }

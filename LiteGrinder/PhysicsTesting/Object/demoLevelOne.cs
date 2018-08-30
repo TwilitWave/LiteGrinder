@@ -1,4 +1,5 @@
-﻿using LiteGrinder.Object;
+﻿using LiteGrinder.MapObject;
+using LiteGrinder.Object;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicsTesting;
@@ -21,6 +22,8 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(1f, 8f), BodyType.Static);
             new CollectableItem(world, 30, 2f, new Vector2(6f, 7f), BodyType.Static);
             new CollectableItem(world, 30, 2f, new Vector2(4f, 2f), BodyType.Static);
+
+            new JetArea(world, 60, 2f, new Vector2(1f,1f), BodyType.Static);
         }
     }
 }

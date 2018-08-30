@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicsTesting;
 using System.Collections.Generic;
@@ -6,9 +8,9 @@ using tainicom.Aether.Physics2D.Collision.Shapes;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Dynamics.Contacts;
 
-namespace LiteGrinder
+namespace LiteGrinder.MapObject
 {
-    class CollectableItem : LiteGrinder.Object.MapObject
+    class JetArea : Object.MapObject
     {
         public static List<Body> collectedItems = new List<Body>();
 
@@ -20,12 +22,12 @@ namespace LiteGrinder
         private CircleShape circle;
         private Fixture fixture;
 
-        public CollectableItem()
+        public JetArea()
         {
 
         }
 
-        public CollectableItem(World world, float radius, float density, Vector2 position, BodyType bodytype)
+        public JetArea(World world, float radius, float density, Vector2 position, BodyType bodytype)
         {
             this.body = world.CreateCircle(ConvertUnits.ToSimUnits(radius), density, position, bodytype);
             this.circle = new CircleShape(ConvertUnits.ToSimUnits(radius), density);
@@ -39,25 +41,16 @@ namespace LiteGrinder
             Body body1 = fixtureA.Body;
             Body body2 = fixtureB.Body;
 
-            if (!collectedItems.Contains(body1))
-            {
-                collectedItems.Add(body1);
-                return false;
-            }
+            body2.ApplyLinearImpulse(new Vector2(0, -10));
 
             return true;
         }
 
-        public override void Update(World world) 
+        public override void Update(World world)
         {
-            for( int i = 0; i < collectedItems.Count; i++)
-            {
-                world.Remove(collectedItems[i]);
-            }
-
-            collectedItems.Clear();
         }
-        public override void Draw(SpriteBatch spriteBatch, Texture2D texture)
+
+        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Texture2D texture)
         {
 
         }

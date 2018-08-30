@@ -43,7 +43,7 @@ namespace PhysicsTesting
         private Camera2d cam;
 
         //Map objects
-        private List<LiteGrinder.Object.Object> objects = new List<LiteGrinder.Object.Object>();
+        private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
         private CollectableItem collectableitem = new CollectableItem();
         private Block block = new Block();
 
@@ -107,8 +107,8 @@ namespace PhysicsTesting
         private void InitialMap()
         {
             demoLevelOne.CreateTestStage(world, pixel);
-            objects.Add(collectableitem);
-            objects.Add(block);
+            mapobjects.Add(collectableitem);
+            mapobjects.Add(block);
         }
 
         /// <summary>
@@ -128,9 +128,9 @@ namespace PhysicsTesting
         protected override void Update(GameTime gameTime)
         {
             HandleControls(gameTime);
-            foreach (LiteGrinder.Object.Object o in objects)
+            foreach (LiteGrinder.Object.MapObject mapobject in mapobjects)
             {
-                o.Update(world);
+                mapobject.Update(world);
             }
 
             if (cameraFollow)
@@ -285,8 +285,8 @@ namespace PhysicsTesting
                 line.Draw(spriteBatch);
             }
 
-            foreach (LiteGrinder.Object.Object o in objects){
-                o.Draw(spriteBatch, pixel);
+            foreach (LiteGrinder.Object.MapObject mapobject in mapobjects){
+                mapobject.Draw(spriteBatch, pixel);
             }
 
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
