@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/u1217224/Documents/GitHub/LiteGrinder/LiteGrinder/PhysicsTesting/Content/1pixel.png</SourceFile>
-  <SourceTime>2018-08-24T19:15:47.128585-06:00</SourceTime>
-  <DestFile>C:/Users/u1217224/Documents/GitHub/LiteGrinder/LiteGrinder/PhysicsTesting/Content/bin/Windows/1pixel.xnb</DestFile>
-  <DestTime>2018-08-28T10:46:55.5887058-06:00</DestTime>
+  <SourceFile>C:/Users/u1217224/Documents/GitHub/LiteGrinder/PhysicsTesting/Content/1pixel.png</SourceFile>
+  <SourceTime>2018-08-30T09:15:30.18746-06:00</SourceTime>
+  <DestFile>C:/Users/u1217224/Documents/GitHub/LiteGrinder/PhysicsTesting/Content/bin/Windows/1pixel.xnb</DestFile>
+  <DestTime>2018-08-30T17:41:47.990722-06:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
