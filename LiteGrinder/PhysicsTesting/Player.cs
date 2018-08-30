@@ -60,7 +60,14 @@ namespace PhysicsTesting
             body.LinearVelocity = new Vector2(0, -1f);
             body.AngularVelocity = 0;
         }
-        
+
+        // Set start position
+        public void SetStartPosition(Vector2 pos)
+        {
+            startPos = pos;
+            body.Position = pos;
+        }
+
         // Get Body
         public Body GetBody()
         {

@@ -18,7 +18,7 @@ namespace PhysicsTesting
         float width, angle, length;
         Body body;
         private static List<Line> lines = new List<Line>();
-        private static Line[] oldLines;
+        private static Line[] oldLines = new Line[0];
 
         public Line(World world, Texture2D texture, Texture2D oldText, Vector2 oldMousePos, Vector2 mousePos, Vector2 camOffset, float width, float length, float angle)
         {
@@ -88,12 +88,9 @@ namespace PhysicsTesting
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (oldLines != null)
+            foreach (Line line in oldLines)
             {
-                foreach (Line line in oldLines)
-                {
-                    spriteBatch.Draw(line.oldLineText, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
-                }
+                spriteBatch.Draw(line.oldLineText, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
             }
             foreach (Line line in lines)
             {
@@ -113,6 +110,11 @@ namespace PhysicsTesting
                 lines.CopyTo(oldLines);
                 lines.Clear();
             }
+        }
+
+        public static void ClearGhostLine()
+        {
+            oldLines = new Line[0];
         }
 
         public void DeleteLine(World world)

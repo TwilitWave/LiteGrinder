@@ -101,11 +101,11 @@ namespace PhysicsTesting
 
             pixel = Content.Load<Texture2D>("1pixel");
             oldLineSprite = Content.Load<Texture2D>("1pixtransparent");
-            createStage = new demoLevelOne(this.Content);
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
             background = Content.Load<Texture2D>("labBackground");
+            createStage = new demoLevelOne(this.Content, player);
             InitialMap();
         }
 
