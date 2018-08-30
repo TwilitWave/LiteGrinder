@@ -13,15 +13,17 @@ namespace PhysicsTesting
     /// </summary>
     public class Line
     {
-        Texture2D texture;
+        Texture2D texture, oldLineText;
         Vector2 start, origin;
         float width, angle, length;
         Body body;
         private static List<Line> lines = new List<Line>();
+        private static Line[] oldLines;
 
-        public Line(World world, Texture2D texture, Vector2 oldMousePos, Vector2 mousePos, Vector2 camOffset, float width, float length, float angle)
+        public Line(World world, Texture2D texture, Texture2D oldText, Vector2 oldMousePos, Vector2 mousePos, Vector2 camOffset, float width, float length, float angle)
         {
             this.texture = texture;
+            this.oldLineText = oldText;
             this.start = oldMousePos + camOffset;
             this.width = width;
             this.length = length;
@@ -48,7 +50,7 @@ namespace PhysicsTesting
 
                     if (newLength > 0)
                     {
-                        new Line(world, texture, points[i - 1], points[i], camOffset, width, newLength, angle);
+                        new Line(world, texture, oldText, points[i - 1], points[i], camOffset, width, newLength, angle);
                     }
                 }
                 return;
@@ -86,6 +88,13 @@ namespace PhysicsTesting
 
         public static void Draw(SpriteBatch spriteBatch)
         {
+            if (oldLines != null)
+            {
+                foreach (Line line in oldLines)
+                {
+                    spriteBatch.Draw(line.oldLineText, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
+                }
+            }
             foreach (Line line in lines)
             {
                 spriteBatch.Draw(line.texture, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
@@ -100,6 +109,8 @@ namespace PhysicsTesting
                 {
                     world.Remove(b.body);
                 }
+                oldLines = new Line[lines.Count];
+                lines.CopyTo(oldLines);
                 lines.Clear();
             }
         }

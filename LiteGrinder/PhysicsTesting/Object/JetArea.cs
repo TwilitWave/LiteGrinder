@@ -12,7 +12,7 @@ namespace LiteGrinder.MapObject
 {
     class JetArea : Object.MapObject
     {
-        public static List<Body> collectedItems = new List<Body>();
+        private static List<JetArea> jets = new List<JetArea>();
 
         private World world;
         private Body body;
@@ -58,7 +58,11 @@ namespace LiteGrinder.MapObject
 
         public override void Delete(World world)
         {
-            throw new System.NotImplementedException();
+            foreach (JetArea j in jets)
+            {
+                world.Remove(j.body);
+            }
+            jets.Clear();
         }
     }
 }

@@ -38,6 +38,7 @@ namespace PhysicsTesting
 
         private demoLevelOne createStage;
         private Texture2D pixel;
+        private Texture2D oldLineSprite;
         private Texture2D background;
         private SpriteFont font;
         private Camera2d cam;
@@ -99,6 +100,7 @@ namespace PhysicsTesting
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             pixel = Content.Load<Texture2D>("1pixel");
+            oldLineSprite = Content.Load<Texture2D>("1pixtransparent");
             createStage = new demoLevelOne(this.Content);
 
             //Object Initializations
@@ -281,7 +283,7 @@ namespace PhysicsTesting
                 length = 1;
             }
 
-            Line newLine = new Line(world, pixel, oldMousePos, mousePos, camOffset, width, length, angle);
+            Line newLine = new Line(world, pixel, oldLineSprite, oldMousePos, mousePos, camOffset, width, length, angle);
 
             totallength += length;
         }
