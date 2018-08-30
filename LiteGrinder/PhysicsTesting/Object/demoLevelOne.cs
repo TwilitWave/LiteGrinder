@@ -19,11 +19,11 @@ namespace LiteGrinder
             new Block(world, new Vector2(15f, 10f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, texture2d);
             new Block(world, new Vector2(19f, 6f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(50), 1f, 0, BodyType.Static, texture2d);
 
-            new CollectableItem(world, 30, 2f, new Vector2(1f, 8f), BodyType.Static);
-            new CollectableItem(world, 30, 2f, new Vector2(6f, 7f), BodyType.Static);
-            new CollectableItem(world, 30, 2f, new Vector2(4f, 2f), BodyType.Static);
+            new CollectableItem(world, 30, 2f, new Vector2(4f, 8f), BodyType.Static);
+            new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static);
+            new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static);
 
-            new JetArea(world, 60, 2f, new Vector2(4f,8f), BodyType.Static);
+            new JetArea(world, 60, 2f, new Vector2(7f,6f), BodyType.Static);
         }
     }
 }

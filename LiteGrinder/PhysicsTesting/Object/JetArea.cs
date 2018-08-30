@@ -42,7 +42,7 @@ namespace LiteGrinder.MapObject
             Body body1 = fixtureA.Body;
             Body body2 = fixtureB.Body;
 
-            body2.ApplyLinearImpulse(new Vector2(0, -15));
+            body2.ApplyLinearImpulse(new Vector2(0, -10));
 
             return true;
         }
