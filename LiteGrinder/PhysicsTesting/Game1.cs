@@ -20,7 +20,7 @@ namespace PhysicsTesting
         private float maxLength = 3000;
         private float jumpForce = -18;
         private bool gameisproceeding = false;
-        private bool cameraFollow = true;
+        private bool cameraFollow = false;
 
         private World world;
         private List<Body> boxes = new List<Body>();
@@ -39,6 +39,8 @@ namespace PhysicsTesting
         private Matrix projection;
 
         private Texture2D pixel;
+        private Texture2D wallTile;
+        private Texture2D background;
         private SpriteFont font;
         private Camera2d cam;
 
@@ -46,6 +48,7 @@ namespace PhysicsTesting
         private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
         private CollectableItem collectableitem = new CollectableItem();
         private Block block = new Block();
+        private Vector2 oldCamPos;
 
         public Game1()
         {
@@ -97,10 +100,17 @@ namespace PhysicsTesting
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             pixel = Content.Load<Texture2D>("1pixel");
+            wallTile = Content.Load<Texture2D>("wallTile");
 
+<<<<<<< HEAD
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Dude_2048"), jumpForce);
+=======
+            background = Content.Load<Texture2D>("labBackground");
+>>>>>>> c865743907ba2c9c506db6d9ea1e312cee4d0b9d
 
+            //Object Initializations
+            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
             InitialMap();
         }
 
@@ -209,6 +219,11 @@ namespace PhysicsTesting
                mousePos = new Vector2(0, 0);
             }
 
+            if (oldCamPos != cam.Pos)
+            {
+                oldCamPos = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
+            }
+
             // Move camera - Only moving the sprites ATM
             if (keyState.IsKeyDown(Keys.Left))
                 cam.Pos += new Vector2(-4f,0);
@@ -229,6 +244,8 @@ namespace PhysicsTesting
             oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
             mousePos = new Vector2(mouseState.X, mouseState.Y);
             var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
+            var deltaCam = camOffset - oldCamPos;
+            oldMousePos += deltaCam;
 
             float angle = (float)Math.Atan2(mousePos.Y - oldMousePos.Y, mousePos.X - oldMousePos.X);
             float length = Vector2.Distance(oldMousePos, mousePos);
@@ -276,21 +293,37 @@ namespace PhysicsTesting
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
-            player.Draw(spriteBatch);
+            
+            // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
+            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+
+            player.Draw(spriteBatch, gameTime);
 
             foreach (Line line in lines)
             {
                 line.Draw(spriteBatch);
             }
 
+<<<<<<< HEAD
             foreach (LiteGrinder.Object.MapObject mapobject in mapobjects){
                 mapobject.Draw(spriteBatch, pixel);
             }
 
+=======
+>>>>>>> c865743907ba2c9c506db6d9ea1e312cee4d0b9d
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
             spriteBatch.End();
+
+            
+            // Linear wrap drawing for the obstacles
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
+            foreach (LiteGrinder.Object.Object o in objects)
+            {
+                o.Draw(spriteBatch, wallTile);
+            }
+            spriteBatch.End();
+
 
             base.Draw(gameTime);
         }
