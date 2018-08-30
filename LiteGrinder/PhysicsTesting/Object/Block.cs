@@ -10,6 +10,7 @@ namespace LiteGrinder.Object
     class Block : LiteGrinder.Object.MapObject
     {
         private static List<Block> blocks = new List<Block>();
+        private static Texture2D texture;
 
         private World world;
         private Body block;
@@ -17,7 +18,6 @@ namespace LiteGrinder.Object
         private float width, height;
         private float density, rotation;
         private BodyType bodytype;
-        private Texture2D texture2d;
 
         private Vector2 origin;
 
@@ -38,9 +38,9 @@ namespace LiteGrinder.Object
             this.density = density;
             this.rotation = rotation;
             this.bodytype = bodytype;
-            this.texture2d = texture2d;
+            texture = texture2d;
 
-            this.origin = new Vector2(texture2d.Width / 2f, texture2d.Height / 2f);
+            this.origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
 
             this.block = world.CreateRectangle(width, height, density, position, rotation, bodytype);
             block.SetRestitution(restitution);
@@ -54,12 +54,21 @@ namespace LiteGrinder.Object
 
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             foreach(Block block in blocks)
             {
                 spriteBatch.Draw(texture, ConvertUnits.ToDisplayUnits(block.position), new Rectangle(0, 0, (int)block.width, (int)block.height), Color.White, 0, new Vector2(block.width / 2, block.height / 2), new Vector2(1, 1), SpriteEffects.None, 0f);
             }
+        }
+
+        public override void Delete(World world)
+        {
+            foreach(Block b in blocks)
+            {
+                world.Remove(b.block);
+            }
+            blocks.Clear();
         }
     }
 }

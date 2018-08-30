@@ -27,7 +27,7 @@ namespace PhysicsTesting
             this.length = length;
             this.angle = angle;
             this.origin = new Vector2(length/2,width/2);
-
+            
             if (length > 25)
             {
                 int fract = (int)length / 25;

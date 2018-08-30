@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicsTesting;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using tainicom.Aether.Physics2D.Collision.Shapes;
@@ -24,9 +25,8 @@ namespace LiteGrinder.Object
         private Body body;
         private World world;
         
-        public NoDrawArea(Texture2D sprite)
+        public NoDrawArea()
         {
-            this.text = sprite;
         }
 
         public NoDrawArea(World world, Vector2 position, float width, float height, float rotation, Texture2D texture2d)
@@ -67,13 +67,22 @@ namespace LiteGrinder.Object
             deleteLines.Clear();
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             foreach(NoDrawArea area in noDrawAreas)
             {
-                spriteBatch.Draw(text, ConvertUnits.ToDisplayUnits(area.position), new Rectangle(0, 0, (int)area.width, (int)area.height), 
+                spriteBatch.Draw(area.text, ConvertUnits.ToDisplayUnits(area.position), new Rectangle(0, 0, (int)area.width, (int)area.height), 
                     Color.White, rotation, new Vector2(area.width / 2, area.height / 2), new Vector2(1, 1), SpriteEffects.None, 0f);
             }
+        }
+
+        public override void Delete(World world)
+        {
+            foreach (NoDrawArea area in noDrawAreas)
+            {
+                world.Remove(area.body);
+            }
+            noDrawAreas.Clear();
         }
     }
 }

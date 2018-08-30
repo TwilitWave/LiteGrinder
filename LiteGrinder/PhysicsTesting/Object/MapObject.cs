@@ -5,9 +5,6 @@ namespace LiteGrinder.Object
 {
     abstract class MapObject
     {
-        private World world;
-        private SpriteBatch spritBatch;
-        private Texture2D texture;
 
         public MapObject()
         {
@@ -16,6 +13,8 @@ namespace LiteGrinder.Object
 
         public abstract void Update(World world);
 
-        public abstract void Draw(SpriteBatch spriteBatch, Texture2D texture);
+        public abstract void Draw(SpriteBatch spriteBatch);
+
+        public abstract void Delete(World world);
     }
 }
