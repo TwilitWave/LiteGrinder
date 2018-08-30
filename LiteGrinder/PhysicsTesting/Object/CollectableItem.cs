@@ -35,6 +35,8 @@ namespace LiteGrinder
             this.fixture = body.CreateFixture(circle);
             this.body.SetIsSensor(true);
             this.radius = radius;
+
+            this.body.Tag = this;
             fixture.OnCollision += OnCollision;
             items.Add(this);
         }
@@ -47,13 +49,6 @@ namespace LiteGrinder
             if (!collectedItems.Contains(body1))
             {
                 collectedItems.Add(body1);
-                foreach (CollectableItem item in items)
-                {
-                    if(item.body == body1)
-                    {
-
-                    }
-                }
                 return false;
             }
 
@@ -65,6 +60,7 @@ namespace LiteGrinder
             for( int i = 0; i < collectedItems.Count; i++)
             {
                 world.Remove(collectedItems[i]);
+                items.Remove((CollectableItem)collectedItems[i].Tag);
             }
 
             collectedItems.Clear();
