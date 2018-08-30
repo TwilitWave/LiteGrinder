@@ -12,8 +12,10 @@ namespace LiteGrinder
     class CollectableItem : LiteGrinder.Object.MapObject
     {
         public static List<Body> collectedItems = new List<Body>();
-
         private static List<CollectableItem> items = new List<CollectableItem>();
+
+        public static Texture2D texture;
+
         private World world;
         private Body body;
         private float radius, density;
@@ -21,20 +23,19 @@ namespace LiteGrinder
         private BodyType bodytype;
         private CircleShape circle;
         private Fixture fixture;
-        private Texture2D sprite;
 
-        public CollectableItem(Texture2D sprite)
+        public CollectableItem()
         {
-            this.sprite = sprite;
         }
 
-        public CollectableItem(World world, float radius, float density, Vector2 position, BodyType bodytype)
+        public CollectableItem(World world, float radius, float density, Vector2 position, BodyType bodytype, Texture2D texture2d)
         {
             this.body = world.CreateCircle(ConvertUnits.ToSimUnits(radius), density, position, bodytype);
             this.circle = new CircleShape(ConvertUnits.ToSimUnits(radius), density);
             this.fixture = body.CreateFixture(circle);
             this.body.SetIsSensor(true);
             this.radius = radius;
+            texture = texture2d;
 
             this.body.Tag = this;
             fixture.OnCollision += OnCollision;
@@ -65,11 +66,11 @@ namespace LiteGrinder
 
             collectedItems.Clear();
         }
-        public override void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             foreach(CollectableItem item in items)
             {
-                spriteBatch.Draw(sprite, ConvertUnits.ToDisplayUnits(item.body.Position), null, Color.White, 0, new Vector2(sprite.Width/2, sprite.Height/2), new Vector2(1/20f, 1/20f), SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, ConvertUnits.ToDisplayUnits(item.body.Position), null, Color.White, 0, new Vector2(texture.Width/2, texture.Height/2), new Vector2(1/20f, 1/20f), SpriteEffects.None, 0f);
             }
         }
     }

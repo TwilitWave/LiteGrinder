@@ -38,6 +38,7 @@ namespace PhysicsTesting
         private SpriteBatch spriteBatch;
         private Matrix projection;
 
+        private demoLevelOne createStage;
         private Texture2D pixel;
         private Texture2D wallTile;
         private Texture2D collectSprite;
@@ -47,8 +48,7 @@ namespace PhysicsTesting
 
         //Map objects
         private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
-        private CollectableItem collectableitem;
-
+        private CollectableItem collectableitem = new CollectableItem();
         private Block block = new Block();
         private Vector2 oldCamPos;
 
@@ -102,8 +102,7 @@ namespace PhysicsTesting
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             pixel = Content.Load<Texture2D>("1pixel");
-            wallTile = Content.Load<Texture2D>("wallTile");
-            collectSprite = Content.Load<Texture2D>("strawberry");
+            createStage = new demoLevelOne(this.Content);
 
 
             //Object Initializations
@@ -114,8 +113,7 @@ namespace PhysicsTesting
 
         private void InitialMap()
         {
-            demoLevelOne.CreateTestStage(world, pixel);
-            collectableitem = new CollectableItem(collectSprite);
+            createStage.CreateTestStage(world);
             mapobjects.Add(collectableitem);
             mapobjects.Add(block);
         }
@@ -304,7 +302,7 @@ namespace PhysicsTesting
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
             
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
-            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             player.Draw(spriteBatch, gameTime);
 
@@ -321,7 +319,7 @@ namespace PhysicsTesting
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
             foreach (LiteGrinder.Object.MapObject o in mapobjects)
             {
-                o.Draw(spriteBatch, wallTile);
+                o.Draw(spriteBatch);
             }
             spriteBatch.End();
 

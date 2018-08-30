@@ -51,7 +51,7 @@ namespace LiteGrinder.MapObject
         {
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Texture2D texture)
+        public override void Draw(SpriteBatch spriteBatch)
         {
 
         }
