@@ -103,7 +103,8 @@ namespace PhysicsTesting
             oldLineSprite = Content.Load<Texture2D>("1pixtransparent");
 
             //Object Initializations
-            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
+            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1")
+                , Content.Load<Texture2D>("Lab_Hamster 2"), Content.Load<Texture2D>("portal_start"), Content.Load<Texture2D>("portal_goal"), jumpForce);
             background = Content.Load<Texture2D>("labBackground");
             createStage = new demoLevelOne(this.Content, player);
             InitialMap();
@@ -298,7 +299,7 @@ namespace PhysicsTesting
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
             
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
-            spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             player.Draw(spriteBatch, gameTime);
 
