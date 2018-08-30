@@ -58,7 +58,6 @@ namespace LiteGrinder.Object
             foreach(Block block in blocks)
             {
                 spriteBatch.Draw(texture, ConvertUnits.ToDisplayUnits(block.position), new Rectangle(0, 0, (int)block.width, (int)block.height), Color.White, 0, new Vector2(block.width / 2, block.height / 2), new Vector2(1, 1), SpriteEffects.None, 0f);
-
             }
         }
     }

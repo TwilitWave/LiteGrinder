@@ -40,13 +40,14 @@ namespace PhysicsTesting
 
         private Texture2D pixel;
         private Texture2D wallTile;
+        private Texture2D collectSprite;
         private Texture2D background;
         private SpriteFont font;
         private Camera2d cam;
 
         //Map objects
         private List<LiteGrinder.Object.Object> objects = new List<LiteGrinder.Object.Object>();
-        private CollectableItem collectableitem = new CollectableItem();
+        private CollectableItem collectableitem;
         private Block block = new Block();
         private Vector2 oldCamPos;
 
@@ -101,6 +102,7 @@ namespace PhysicsTesting
 
             pixel = Content.Load<Texture2D>("1pixel");
             wallTile = Content.Load<Texture2D>("wallTile");
+            collectSprite = Content.Load<Texture2D>("strawberry");
 
             background = Content.Load<Texture2D>("labBackground");
 
@@ -112,6 +114,7 @@ namespace PhysicsTesting
         private void InitialMap()
         {
             demoLevelOne.CreateTestStage(world, pixel);
+            collectableitem = new CollectableItem(collectSprite);
             objects.Add(collectableitem);
             objects.Add(block);
         }
