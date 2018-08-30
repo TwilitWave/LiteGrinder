@@ -37,6 +37,8 @@ namespace PhysicsTesting
         private SpriteBatch spriteBatch;
 
         private Texture2D pixel;
+        private Texture2D wallTile;
+        private Texture2D background;
         private SpriteFont font;
         private Camera2d cam;
 
@@ -86,10 +88,13 @@ namespace PhysicsTesting
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             pixel = Content.Load<Texture2D>("1pixel");
+            wallTile = Content.Load<Texture2D>("wallTile");
+
+            background = Content.Load<Texture2D>("labBackground");
 
             //Object Initializations
-            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Dude_2048"), jumpForce);
-            demoLevelOne.CreateTestStage(obstacles, world, pixel);
+            player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
+            demoLevelOne.CreateTestStage(obstacles, world, wallTile);
             CollectableItem.CreateCorrectableItem(world);
 
         }
@@ -210,7 +215,6 @@ namespace PhysicsTesting
             mousePos = new Vector2(mouseState.X, mouseState.Y);
             var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
             var deltaCam = camOffset - oldCamPos;
-            Debug.Print(deltaCam.ToString());
             oldMousePos += deltaCam;
 
             float angle = (float)Math.Atan2(mousePos.Y - oldMousePos.Y, mousePos.X - oldMousePos.X);
@@ -259,14 +263,12 @@ namespace PhysicsTesting
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
-            player.Draw(spriteBatch);
 
-            foreach (demoLevelOne obstacle in obstacles)
-            {
-                spriteBatch.Draw(pixel, ConvertUnits.ToDisplayUnits(obstacle.body.Position), null, Color.Green, 0, obstacle.Origin, new Vector2(obstacle.width, obstacle.height), SpriteEffects.None, 0f);
-            }
+            // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
+            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+
+            player.Draw(spriteBatch, gameTime);
 
             foreach (Line line in lines)
             {
@@ -276,7 +278,18 @@ namespace PhysicsTesting
             var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
              ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
+
             spriteBatch.End();
+
+
+            // Linear wrap drawing for the obstacles
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
+            foreach (demoLevelOne obstacle in obstacles)
+            {
+                spriteBatch.Draw(wallTile, ConvertUnits.ToDisplayUnits(obstacle.body.Position), new Rectangle(0, 0, (int)obstacle.width, (int)obstacle.height), Color.White, 0, new Vector2(obstacle.width/2, obstacle.height/2), new Vector2(1, 1), SpriteEffects.None, 0f);
+            }
+            spriteBatch.End();
+
 
             base.Draw(gameTime);
         }
