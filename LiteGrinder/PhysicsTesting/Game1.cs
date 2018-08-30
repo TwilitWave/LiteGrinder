@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using LiteGrinder;
 using System.Diagnostics;
+using LiteGrinder.Object;
 
 namespace PhysicsTesting
 {
@@ -14,7 +15,7 @@ namespace PhysicsTesting
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
-    {
+    { 
         //Control variables
         private float maxLength = 3000;
         private float jumpForce = -18;
@@ -25,22 +26,29 @@ namespace PhysicsTesting
         private List<Body> boxes = new List<Body>();
         private List<Line> lines =  new List<Line>();
         private Player player;
-        private List<demoLevelOne> obstacles = new List<demoLevelOne>();
 
         private Vector2 oldMousePos, mousePos;
-        private Vector2 oldCamPos;
-        private KeyboardState _oldKeyState;
+        private KeyboardState keyState, oldKeyState;
+        private MouseState mouseState, oldMouseState;
+
         private float totallength = 0;
 
         private DebugView debuginfo;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+        private Matrix projection;
 
         private Texture2D pixel;
         private Texture2D wallTile;
         private Texture2D background;
         private SpriteFont font;
         private Camera2d cam;
+
+        //Map objects
+        private List<LiteGrinder.Object.Object> objects = new List<LiteGrinder.Object.Object>();
+        private CollectableItem collectableitem = new CollectableItem();
+        private Block block = new Block();
+        private Vector2 oldCamPos;
 
         public Game1()
         {
@@ -81,6 +89,10 @@ namespace PhysicsTesting
             debuginfo.AppendFlags(DebugViewFlags.Shape);
             debuginfo.RemoveFlags(DebugViewFlags.Controllers);
 
+            //Something about Projection
+            projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
+            ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
+
             // Initialize camera controls
             cam = new Camera2d(new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
 
@@ -94,9 +106,14 @@ namespace PhysicsTesting
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
-            demoLevelOne.CreateTestStage(obstacles, world, wallTile);
-            CollectableItem.CreateCorrectableItem(world);
+            InitialMap();
+        }
 
+        private void InitialMap()
+        {
+            demoLevelOne.CreateTestStage(world, pixel);
+            objects.Add(collectableitem);
+            objects.Add(block);
         }
 
         /// <summary>
@@ -116,7 +133,10 @@ namespace PhysicsTesting
         protected override void Update(GameTime gameTime)
         {
             HandleControls(gameTime);
-            CollectableItem.UpdataCollactableItem(world);
+            foreach (LiteGrinder.Object.Object o in objects)
+            {
+                o.Update(world);
+            }
 
             if (cameraFollow)
                 cam.Pos = ConvertUnits.ToDisplayUnits(player.GetBody().Position);
@@ -131,8 +151,8 @@ namespace PhysicsTesting
 
         private void HandleControls(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
-            MouseState mouseState = Mouse.GetState();
+            keyState = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
             if (mousePos == Vector2.Zero)
             {
@@ -140,15 +160,14 @@ namespace PhysicsTesting
                 oldMousePos = mousePos;
             }
 
-            if (state.IsKeyDown(Keys.Escape))
+            if (keyState.IsKeyDown(Keys.Escape))
                 Exit();
 
             // Reset scene
-            if (state.IsKeyDown(Keys.R))
+            if (keyState.IsKeyDown(Keys.R))
             {
                 cam.Reset();
                 gameisproceeding = false;
-                CollectableItem.CreateCorrectableItem(world);
                 player.ResetPosition();
                 totallength = 0;
                 if (boxes.Count > 0)
@@ -162,22 +181,20 @@ namespace PhysicsTesting
                 }
             }
 
-            if (state.IsKeyDown(Keys.W) && _oldKeyState.IsKeyUp(Keys.W))
+            if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
             {
                 gameisproceeding = (gameisproceeding ? false : true);
             }
 
             // Jump when you press space
             player.jumpCD += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (state.IsKeyDown(Keys.Space) && _oldKeyState.IsKeyUp(Keys.Space))
+            if (keyState.IsKeyDown(Keys.Space) && oldKeyState.IsKeyUp(Keys.Space))
             {
                 player.Jump();
             }
 
-            _oldKeyState = state;
-
             // Reset just player circle
-            if (state.IsKeyDown(Keys.S))
+            if (keyState.IsKeyDown(Keys.S))
             {
                 player.ResetPosition();
             }
@@ -185,12 +202,16 @@ namespace PhysicsTesting
             // Drawing
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                MouseDrawing(mouseState);
+                MouseDrawing(mouseState,oldMouseState);
             }
 
-            if (mouseState.LeftButton == ButtonState.Released)
+            if (mouseState.RightButton == ButtonState.Pressed)
             {
-                mousePos = new Vector2(0, 0);
+            }
+
+            if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)
+            {
+               mousePos = new Vector2(0, 0);
             }
 
             if (oldCamPos != cam.Pos)
@@ -199,19 +220,23 @@ namespace PhysicsTesting
             }
 
             // Move camera - Only moving the sprites ATM
-            if (state.IsKeyDown(Keys.Left))
+            if (keyState.IsKeyDown(Keys.Left))
                 cam.Pos += new Vector2(-4f,0);
-            if (state.IsKeyDown(Keys.Right))
+            if (keyState.IsKeyDown(Keys.Right))
                 cam.Pos += new Vector2(4f, 0);
-            if (state.IsKeyDown(Keys.Up))
+            if (keyState.IsKeyDown(Keys.Up))
                 cam.Pos += new Vector2(0f, -4f);
-            if (state.IsKeyDown(Keys.Down))
+            if (keyState.IsKeyDown(Keys.Down))
                 cam.Pos += new Vector2(0f, 4f);
+
+            // memorize the state of mouse and keyboard 1 update before
+            oldKeyState = keyState;
+            oldMouseState = mouseState;
         }
 
-        private void MouseDrawing(MouseState mouseState)
-        {
-            oldMousePos = mousePos;
+        private void MouseDrawing(MouseState mouseState, MouseState oldMouseState)
+        {   
+            oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
             mousePos = new Vector2(mouseState.X, mouseState.Y);
             var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
             var deltaCam = camOffset - oldCamPos;
@@ -264,7 +289,7 @@ namespace PhysicsTesting
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
-
+            
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
             //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
@@ -275,18 +300,15 @@ namespace PhysicsTesting
                 line.Draw(spriteBatch);
             }
 
-            var projection = Matrix.CreateOrthographicOffCenter(0f, ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Width),
-             ConvertUnits.ToSimUnits(graphics.GraphicsDevice.Viewport.Height), 0f, 0f, 1f);
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
-
             spriteBatch.End();
 
-
+            
             // Linear wrap drawing for the obstacles
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
-            foreach (demoLevelOne obstacle in obstacles)
+            foreach (LiteGrinder.Object.Object o in objects)
             {
-                spriteBatch.Draw(wallTile, ConvertUnits.ToDisplayUnits(obstacle.body.Position), new Rectangle(0, 0, (int)obstacle.width, (int)obstacle.height), Color.White, 0, new Vector2(obstacle.width/2, obstacle.height/2), new Vector2(1, 1), SpriteEffects.None, 0f);
+                o.Draw(spriteBatch, wallTile);
             }
             spriteBatch.End();
 

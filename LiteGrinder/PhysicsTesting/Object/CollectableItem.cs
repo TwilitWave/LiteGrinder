@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PhysicsTesting;
 using System.Collections.Generic;
 using tainicom.Aether.Physics2D.Collision.Shapes;
@@ -7,16 +8,29 @@ using tainicom.Aether.Physics2D.Dynamics.Contacts;
 
 namespace LiteGrinder
 {
-    class CollectableItem
+    class CollectableItem : LiteGrinder.Object.Object
     {
-        private static List<Body> collectedItems = new List<Body>();
+        public static List<Body> collectedItems = new List<Body>();
 
-        private CollectableItem(World world)
+        private World world;
+        private Body body;
+        private float radius, density;
+        private Vector2 position;
+        private BodyType bodytype;
+        private CircleShape circle;
+        private Fixture fixture;
+
+        public CollectableItem()
         {
-            Body body = world.CreateCircle(ConvertUnits.ToSimUnits(30), 2f, new Vector2(1f, 8f), BodyType.Static);
-            CircleShape circle = new CircleShape(ConvertUnits.ToSimUnits(30), 0f);
-            Fixture fixture = body.CreateFixture(circle);
-            body.SetIsSensor(true);
+
+        }
+
+        public CollectableItem(World world, float radius, float density, Vector2 position, BodyType bodytype)
+        {
+            this.body = world.CreateCircle(ConvertUnits.ToSimUnits(radius), density, position, bodytype);
+            this.circle = new CircleShape(ConvertUnits.ToSimUnits(radius), density);
+            this.fixture = body.CreateFixture(circle);
+            this.body.SetIsSensor(true);
             fixture.OnCollision += OnCollision;
         }
 
@@ -34,7 +48,7 @@ namespace LiteGrinder
             return true;
         }
 
-        public static void UpdataCollactableItem(World world) 
+        public override void Update(World world) 
         {
             for( int i = 0; i < collectedItems.Count; i++)
             {
@@ -43,10 +57,9 @@ namespace LiteGrinder
 
             collectedItems.Clear();
         }
-
-        public static void CreateCorrectableItem(World world)
+        public override void Draw(SpriteBatch spriteBatch, Texture2D texture)
         {
-            new CollectableItem(world);
+
         }
     }
 }
