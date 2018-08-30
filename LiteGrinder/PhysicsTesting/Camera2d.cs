@@ -41,6 +41,7 @@ namespace PhysicsTesting
         public Matrix get_transformation(GraphicsDevice graphicsDevice)
         {
             transform =  Matrix.CreateTranslation(new Vector3(-pos.X, -pos.Y, 0)) *
+                                         Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
                                          Matrix.CreateTranslation(new Vector3(graphicsDevice.Viewport.Width * 0.5f, graphicsDevice.Viewport.Height * 0.5f, 0));
             return transform;
         }
