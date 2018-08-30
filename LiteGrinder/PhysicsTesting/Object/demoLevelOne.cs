@@ -55,7 +55,7 @@ namespace LiteGrinder
         public void DemoStage2(World world)
         {
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(350, 50)));
-            player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 520)));
+            player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1670, 1020)));
 
             wallTile = Content.Load<Texture2D>("wallTile");
             new Block(world, new Vector2(5f, 5f), ConvertUnits.ToSimUnits(100), ConvertUnits.ToSimUnits(800), 1f, 0, BodyType.Static, wallTile);

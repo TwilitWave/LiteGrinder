@@ -13,6 +13,7 @@ namespace PhysicsTesting
 
         private World world;
         private Body body;
+        private Body endGoal;
         private Fixture bodySensor;
         private Vector2 circleOrigin;
         private bool isGrounded = false;
@@ -43,6 +44,7 @@ namespace PhysicsTesting
             body = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, circlePos, BodyType.Dynamic);
             body.SetRestitution(0.0f);
             body.SetFriction(1f);
+            body.Tag = this;
 
             bodySensor = body.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
             bodySensor.IsSensor = true;
@@ -50,6 +52,21 @@ namespace PhysicsTesting
             {
                 if(!fixtureB.IsSensor)
                     isGrounded = true;
+                return true;
+            };
+
+
+            endGoal = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, new Vector2(10000,10000));
+            endGoal.SetIsSensor(true);
+            Fixture goalSensor = endGoal.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
+            goalSensor.IsSensor = true;
+            goalSensor.OnCollision += (fixtureA, fixtureB, contact) =>
+            {
+                Debug.Print("COLLIDE");
+                if (fixtureB.Body.Tag is Player)
+                {
+                    HitEndGoal();
+                }
                 return true;
             };
         }
@@ -63,6 +80,12 @@ namespace PhysicsTesting
             body.AngularVelocity = 0;
         }
 
+        // Called when player hits the end goal
+        private void HitEndGoal()
+        {
+            Debug.Print("GOAOOOAL");
+        }
+
         // Set start position
         public void SetStartPosition(Vector2 pos)
         {
@@ -74,6 +97,7 @@ namespace PhysicsTesting
         public void SetGoalPosition(Vector2 pos)
         {
             endPos = pos;
+            endGoal.Position = pos;
         }
 
         // Get Body
