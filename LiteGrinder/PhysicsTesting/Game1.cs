@@ -46,8 +46,9 @@ namespace PhysicsTesting
         private Camera2d cam;
 
         //Map objects
-        private List<LiteGrinder.Object.Object> objects = new List<LiteGrinder.Object.Object>();
+        private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
         private CollectableItem collectableitem;
+
         private Block block = new Block();
         private Vector2 oldCamPos;
 
@@ -104,10 +105,10 @@ namespace PhysicsTesting
             wallTile = Content.Load<Texture2D>("wallTile");
             collectSprite = Content.Load<Texture2D>("strawberry");
 
-            background = Content.Load<Texture2D>("labBackground");
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
+            background = Content.Load<Texture2D>("labBackground");
             InitialMap();
         }
 
@@ -115,8 +116,8 @@ namespace PhysicsTesting
         {
             demoLevelOne.CreateTestStage(world, pixel);
             collectableitem = new CollectableItem(collectSprite);
-            objects.Add(collectableitem);
-            objects.Add(block);
+            mapobjects.Add(collectableitem);
+            mapobjects.Add(block);
         }
 
         /// <summary>
@@ -136,9 +137,9 @@ namespace PhysicsTesting
         protected override void Update(GameTime gameTime)
         {
             HandleControls(gameTime);
-            foreach (LiteGrinder.Object.Object o in objects)
+            foreach (LiteGrinder.Object.MapObject mapobject in mapobjects)
             {
-                o.Update(world);
+                mapobject.Update(world);
             }
 
             if (cameraFollow)
@@ -318,7 +319,7 @@ namespace PhysicsTesting
             
             // Linear wrap drawing for the obstacles
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
-            foreach (LiteGrinder.Object.Object o in objects)
+            foreach (LiteGrinder.Object.MapObject o in mapobjects)
             {
                 o.Draw(spriteBatch, wallTile);
             }

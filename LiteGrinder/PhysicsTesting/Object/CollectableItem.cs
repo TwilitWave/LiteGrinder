@@ -9,7 +9,7 @@ using tainicom.Aether.Physics2D.Dynamics.Contacts;
 
 namespace LiteGrinder
 {
-    class CollectableItem : LiteGrinder.Object.Object
+    class CollectableItem : LiteGrinder.Object.MapObject
     {
         public static List<Body> collectedItems = new List<Body>();
 

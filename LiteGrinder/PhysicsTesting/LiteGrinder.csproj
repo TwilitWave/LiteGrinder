@@ -57,7 +57,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Object\Block.cs" />
-    <Compile Include="Object\Object.cs" />
+    <Compile Include="Object\JetArea.cs" />
+    <Compile Include="Object\MapObject.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Object\CollectableItem.cs" />
     <Compile Include="Game1.cs" />

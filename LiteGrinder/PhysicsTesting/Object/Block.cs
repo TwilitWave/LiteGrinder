@@ -7,10 +7,11 @@ using tainicom.Aether.Physics2D.Dynamics;
 namespace LiteGrinder.Object
 {
 
-    class Block : LiteGrinder.Object.Object
+    class Block : LiteGrinder.Object.MapObject
     {
-        private World world;
         private static List<Block> blocks = new List<Block>();
+
+        private World world;
         private Body block;
         private Vector2 position;
         private float width, height;
