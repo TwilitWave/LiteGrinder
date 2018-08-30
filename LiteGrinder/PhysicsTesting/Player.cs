@@ -44,10 +44,10 @@ namespace PhysicsTesting
 
             bodySensor = body.CreateCircle(ConvertUnits.ToSimUnits(36), 2f);
             bodySensor.IsSensor = true;
-
             bodySensor.OnCollision += (fixtureA, fixtureB, contact) =>
             {
-                isGrounded = true;
+                if(!fixtureB.IsSensor)
+                    isGrounded = true;
                 return true;
             };
         }

@@ -33,6 +33,7 @@ namespace LiteGrinder.MapObject
             this.circle = new CircleShape(ConvertUnits.ToSimUnits(radius), density);
             this.fixture = body.CreateFixture(circle);
             this.body.SetIsSensor(true);
+            this.body.Rotation = .4f;
             fixture.OnCollision += OnCollision;
         }
 
