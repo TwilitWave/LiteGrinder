@@ -23,7 +23,9 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static);
             new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static);
 
-            new JetArea(world, 60, 2f, new Vector2(7f,6f), BodyType.Static);
+            new JetArea(world, 60, 2f, new Vector2(7f, 6f), BodyType.Static);
+
+            new NoDrawArea(world, new Vector2(10f, 3f), ConvertUnits.ToSimUnits(75), ConvertUnits.ToSimUnits(800), 0, texture2d);
         }
     }
 }

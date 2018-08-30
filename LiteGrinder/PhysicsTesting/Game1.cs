@@ -23,8 +23,6 @@ namespace PhysicsTesting
         private bool cameraFollow = false;
 
         private World world;
-        private List<Body> boxes = new List<Body>();
-        private List<Line> lines =  new List<Line>();
         private Player player;
 
         private Vector2 oldMousePos, mousePos;
@@ -39,17 +37,20 @@ namespace PhysicsTesting
         private Matrix projection;
 
         private Texture2D pixel;
+        private Texture2D circle;
         private Texture2D wallTile;
         private Texture2D collectSprite;
         private Texture2D background;
+        private Texture2D badDrawSprite;
         private SpriteFont font;
         private Camera2d cam;
-
+        
         //Map objects
         private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
         private CollectableItem collectableitem;
-
+        
         private Block block = new Block();
+        private NoDrawArea noDraw;
         private Vector2 oldCamPos;
 
         public Game1()
@@ -101,10 +102,11 @@ namespace PhysicsTesting
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            circle = Content.Load<Texture2D>("circle");
             pixel = Content.Load<Texture2D>("1pixel");
             wallTile = Content.Load<Texture2D>("wallTile");
             collectSprite = Content.Load<Texture2D>("strawberry");
-
+            badDrawSprite = Content.Load<Texture2D>("redTransparent");
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1"), Content.Load<Texture2D>("Lab_Hamster 2"), jumpForce);
@@ -116,8 +118,10 @@ namespace PhysicsTesting
         {
             demoLevelOne.CreateTestStage(world, pixel);
             collectableitem = new CollectableItem(collectSprite);
+            noDraw = new NoDrawArea(badDrawSprite);
             mapobjects.Add(collectableitem);
             mapobjects.Add(block);
+            mapobjects.Add(noDraw);
         }
 
         /// <summary>
@@ -174,15 +178,7 @@ namespace PhysicsTesting
                 gameisproceeding = false;
                 player.ResetPosition();
                 totallength = 0;
-                if (boxes.Count > 0)
-                {
-                    foreach (Body b in boxes)
-                    {
-                        world.Remove(b);
-                    }
-                    boxes.Clear();
-                    lines.Clear();
-                }
+                Line.Reset(world);
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -248,7 +244,7 @@ namespace PhysicsTesting
         }
 
         private void MouseDrawing(MouseState mouseState, MouseState oldMouseState)
-        {   
+        {
             oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
             mousePos = new Vector2(mouseState.X, mouseState.Y);
             var camOffset = (cam.Pos - new Vector2(graphics.GraphicsDevice.Viewport.Width / 2f, graphics.GraphicsDevice.Viewport.Height / 2f));
@@ -259,39 +255,19 @@ namespace PhysicsTesting
             float length = Vector2.Distance(oldMousePos, mousePos);
             float width = 6;
 
-            if(totallength > maxLength)
+            if (totallength > maxLength)
             {
                 return;
             }
 
-            if( length > 0)
-            {   
-                Vector2 origin = new Vector2(length / 2, width / 2);
-
-                Body box = world.CreateRectangle(ConvertUnits.ToSimUnits(length),
-                  ConvertUnits.ToSimUnits(width), 10f, oldMousePos, angle);
-
-                box.BodyType = BodyType.Static;
-                box.SetRestitution(0f);
-                box.SetFriction(1f);
-
-                float neg1 = 1;
-                float neg2 = 1;
-                neg1 = (mousePos.X - oldMousePos.X < 0) ? -1 : 1;
-                neg2 = (mousePos.Y - oldMousePos.Y < 0) ? -1 : 1;
-
-
-                Vector2 boxPos = ConvertUnits.ToSimUnits(oldMousePos + ((mousePos - oldMousePos) / 2));
-                box.Position = boxPos - ConvertUnits.ToSimUnits(new Vector2(neg2 * (width / 2), neg1 * (-(width / 2))));
-                box.Position += ConvertUnits.ToSimUnits(camOffset);
-
-                boxes.Add(box);
-
-                Line newLine = new Line(pixel, oldMousePos + camOffset, mousePos, width, length, angle, Color.White, origin);
-                lines.Add(newLine);
-
-                totallength += length;
+            if (length <= 0)
+            {
+                length = 1;
             }
+
+            Line newLine = new Line(world, pixel, oldMousePos, mousePos, camOffset, width, length, angle);
+
+            totallength += length;
         }
 
         /// <summary>
@@ -308,10 +284,7 @@ namespace PhysicsTesting
 
             player.Draw(spriteBatch, gameTime);
 
-            foreach (Line line in lines)
-            {
-                line.Draw(spriteBatch);
-            }
+            Line.Draw(spriteBatch);
 
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
             spriteBatch.End();

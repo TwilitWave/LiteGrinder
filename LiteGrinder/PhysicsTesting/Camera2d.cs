@@ -36,6 +36,7 @@ namespace PhysicsTesting
         public void Reset()
         {
             pos = startPos;
+            zoom = 1;
         }
 
         public Matrix get_transformation(GraphicsDevice graphicsDevice)

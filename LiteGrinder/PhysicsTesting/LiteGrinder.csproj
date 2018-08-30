@@ -56,6 +56,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Object\NoDrawArea.cs" />
     <Compile Include="Object\Block.cs" />
     <Compile Include="Object\JetArea.cs" />
     <Compile Include="Object\MapObject.cs" />
