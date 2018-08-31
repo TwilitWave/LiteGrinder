@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using LiteGrinder;
 using System.Diagnostics;
 using LiteGrinder.Object;
+using LiteGrinder.MapObject;
 
 namespace LyteGrinder
 {
@@ -20,6 +21,7 @@ namespace LyteGrinder
         public static float maxLength = 3000;
         public static float totalLength = 0;
         public static float jumpForce = -18;
+        private Vector2 jetDirection;
 
         private bool gameisproceeding = false;
         private bool cameraFollow = false;
@@ -229,8 +231,18 @@ namespace LyteGrinder
                 MouseDrawing(mouseState,oldMouseState);
             }
 
-            if (mouseState.RightButton == ButtonState.Pressed)
+            // Make a JetArea
+            if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Released)
             {
+                jetDirection = new Vector2(mouseState.X, mouseState.Y);
+            }
+
+            if (mouseState.RightButton == ButtonState.Released && oldMouseState.RightButton == ButtonState.Pressed)
+            {;
+                JetArea jetarea = new JetArea(world, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
+                mapobjects.Add(jetarea);
+                jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
+                jetarea.ChangeImpluse(jetDirection);
             }
 
             if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)

@@ -12,7 +12,6 @@ namespace LiteGrinder
     {
         private ContentManager Content;
 
-        private Texture2D pixel;
         private Texture2D wallTile;
         private Texture2D strawberry;
         private Texture2D noDrawSprite;
