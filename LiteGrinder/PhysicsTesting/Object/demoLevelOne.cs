@@ -42,8 +42,6 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static, strawberry);
 
-            new JetArea(world, 60, 2f, new Vector2(7f, 6f), BodyType.Static);
-
             noDrawSprite = Content.Load<Texture2D>("redTransparent");
             new NoDrawArea(world, new Vector2(10f, 3f), ConvertUnits.ToSimUnits(75), ConvertUnits.ToSimUnits(800), 0, noDrawSprite);
 
@@ -64,8 +62,6 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static, strawberry);
 
-            new JetArea(world, 60, 2f, new Vector2(7f, 6f), BodyType.Static);
-
             Line.ClearGhostLine();
         }
 
@@ -82,8 +78,6 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(4f, 8f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static, strawberry);
-
-            new JetArea(world, 60, 2f, new Vector2(7f, 6f), BodyType.Static);
 
             Line.ClearGhostLine();
         }
