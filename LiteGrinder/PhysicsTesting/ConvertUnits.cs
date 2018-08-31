@@ -5,7 +5,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace PhysicsTesting
+namespace LiteGrinder
 {
     /// <summary>
     /// Convert units between display and simulation units.

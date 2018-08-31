@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using tainicom.Aether.Physics2D.Dynamics;
 
-namespace PhysicsTesting
+namespace LiteGrinder
 {
     public class Player
     {

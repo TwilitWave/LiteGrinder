@@ -69,6 +69,7 @@
     <Compile Include="Object\demoLevelOne.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Aether.Physics2D, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace PhysicsTesting
+namespace LiteGrinder
 {
     public class Camera2d
     {

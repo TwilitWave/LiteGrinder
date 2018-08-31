@@ -3,7 +3,6 @@ using LiteGrinder.Object;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using PhysicsTesting;
 using System;
 using tainicom.Aether.Physics2D.Dynamics;
 

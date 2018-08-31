@@ -9,7 +9,7 @@ using LiteGrinder;
 using System.Diagnostics;
 using LiteGrinder.Object;
 
-namespace PhysicsTesting
+namespace LyteGrinder
 {
     /// <summary>
     /// This is the main type for your game.
@@ -17,8 +17,10 @@ namespace PhysicsTesting
     public class Game1 : Game
     { 
         //Control variables
-        private float maxLength = 3000;
-        private float jumpForce = -18;
+        public static float maxLength = 3000;
+        public static float totalLength = 0;
+        public static float jumpForce = -18;
+
         private bool gameisproceeding = false;
         private bool cameraFollow = false;
 
@@ -29,7 +31,7 @@ namespace PhysicsTesting
         private KeyboardState keyState, oldKeyState;
         private MouseState mouseState, oldMouseState;
 
-        private float totallength = 0;
+        private UserInterface ui;
 
         private DebugView debuginfo;
         private GraphicsDeviceManager graphics;
@@ -40,7 +42,6 @@ namespace PhysicsTesting
         private Texture2D pixel;
         private Texture2D oldLineSprite;
         private Texture2D background;
-        private SpriteFont font;
         private Camera2d cam;
         
         //Map objects
@@ -79,8 +80,6 @@ namespace PhysicsTesting
         /// </summary>
         protected override void LoadContent()
         {
-            font = Content.Load<SpriteFont>("DiagnosticsFont");
-
             world = new World(Vector2.UnitY * 9.82f);
 
             // Debug init
@@ -98,6 +97,9 @@ namespace PhysicsTesting
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Initialize UserInterface
+            ui = new UserInterface(Content);
 
             pixel = Content.Load<Texture2D>("1pixel");
             oldLineSprite = Content.Load<Texture2D>("1pixtransparent");
@@ -140,6 +142,9 @@ namespace PhysicsTesting
                 mapobject.Update(world);
             }
 
+            //update UserInterface values
+            ui.Update();
+
             if (cameraFollow)
                 cam.Pos = ConvertUnits.ToDisplayUnits(player.GetBody().Position);
 
@@ -171,7 +176,7 @@ namespace PhysicsTesting
                 cam.Reset();
                 gameisproceeding = false;
                 player.ResetPosition();
-                totallength = 0;
+                totalLength = 0;
                 Line.Reset(world);
             }
 
@@ -274,7 +279,7 @@ namespace PhysicsTesting
             float length = Vector2.Distance(oldMousePos, mousePos);
             float width = 6;
 
-            if (totallength > maxLength)
+            if (totalLength > maxLength)
             {
                 return;
             }
@@ -286,7 +291,7 @@ namespace PhysicsTesting
 
             Line newLine = new Line(world, pixel, oldLineSprite, oldMousePos, mousePos, camOffset, width, length, angle);
 
-            totallength += length;
+            totalLength += length;
         }
 
         /// <summary>
@@ -316,6 +321,8 @@ namespace PhysicsTesting
                 o.Draw(spriteBatch);
             }
             spriteBatch.End();
+
+            ui.Draw(spriteBatch);
 
 
             base.Draw(gameTime);

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
 
-namespace PhysicsTesting
+namespace LiteGrinder
 {
     /// <summary>
     /// Line class credit to Stan on stackoverflow

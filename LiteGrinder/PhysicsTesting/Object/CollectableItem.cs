@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PhysicsTesting;
 using System.Collections.Generic;
 using System.Diagnostics;
 using tainicom.Aether.Physics2D.Collision.Shapes;
