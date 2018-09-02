@@ -26,7 +26,7 @@ namespace LiteGrinder
 
         public void DemoStage1(World world)
         {
-            Game1.maxJets = 3;
+            Game1.maxJets = 1;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(50, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 520)));
 
@@ -83,6 +83,7 @@ namespace LiteGrinder
         }
         public void DemoStage4(World world)
         {
+            Game1.maxJets = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(150, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 350)));
 
