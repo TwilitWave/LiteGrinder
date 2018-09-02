@@ -37,6 +37,8 @@ namespace LiteGrinder.MapObject
             this.body.SetIsSensor(true);
             this.body.Rotation = .4f;
             fixture.OnCollision += OnCollision;
+
+            jets.Add(this);
         }
 
         public bool OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)

@@ -21,6 +21,7 @@ namespace LyteGrinder
         public static float maxLength = 3000;
         public static float totalLength = 0;
         public static float jumpForce = -18;
+        public static int numberofJet = 3;
         private Vector2 jetDirection;
 
         private bool gameisproceeding = false;
@@ -180,6 +181,13 @@ namespace LyteGrinder
                 player.ResetPosition();
                 totalLength = 0;
                 Line.Reset(world);
+
+                foreach (MapObject o in mapobjects)
+                {
+                    o.Delete(world);
+                }
+                createStage.DemoStage1(world);
+                numberofJet = 3;
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -238,11 +246,20 @@ namespace LyteGrinder
             }
 
             if (mouseState.RightButton == ButtonState.Released && oldMouseState.RightButton == ButtonState.Pressed)
-            {;
-                JetArea jetarea = new JetArea(world, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
-                mapobjects.Add(jetarea);
-                jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
-                jetarea.ChangeImpluse(jetDirection);
+            {
+                if (numberofJet > 0)
+                {
+                    JetArea jetarea = new JetArea(world, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
+                    mapobjects.Add(jetarea);
+                    jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
+                    jetarea.ChangeImpluse(jetDirection);
+                    numberofJet--;
+                }
+                else
+                {
+                    return;
+                }
+     
             }
 
             if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)
