@@ -63,7 +63,6 @@ namespace LiteGrinder
             goalSensor.IsSensor = true;
             goalSensor.OnCollision += (fixtureA, fixtureB, contact) =>
             {
-                Debug.Print("COLLIDE");
                 if (fixtureB.Body.Tag is Player)
                 {
                     HitEndGoal();
@@ -92,8 +91,9 @@ namespace LiteGrinder
         {
             startPos = pos;
             body.Position = pos;
+            ResetPosition();
         }
-        
+
         // Set Goal position
         public void SetGoalPosition(Vector2 pos)
         {

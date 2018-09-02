@@ -87,21 +87,5 @@ namespace LiteGrinder
             Line.ClearGhostLine();
         }
 
-        public void DemoStage4(World world)
-        {
-            player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(800, 50)));
-            player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 300)));
-
-            wallTile = Content.Load<Texture2D>("wallTile");
-            new Block(world, new Vector2(5f, 5f), ConvertUnits.ToSimUnits(330), ConvertUnits.ToSimUnits(700), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(13f, 6f), ConvertUnits.ToSimUnits(600), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, wallTile);
-
-            strawberry = Content.Load<Texture2D>("strawberry");
-            new CollectableItem(world, 30, 2f, new Vector2(4f, 8f), BodyType.Static, strawberry);
-            new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static, strawberry);
-            new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static, strawberry);
-
-            Line.ClearGhostLine();
-        }
     }
 }

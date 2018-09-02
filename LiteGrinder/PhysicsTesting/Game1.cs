@@ -251,29 +251,17 @@ namespace LyteGrinder
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
             {
-                foreach(MapObject o in mapobjects)
-                {
-                    o.Delete(world);
-                }
-                createStage.DemoStage1(world);
+                LoadLevel(1);
                 currentStage = 1;
             }
             if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
             {
-                foreach (MapObject o in mapobjects)
-                {
-                    o.Delete(world);
-                }
-                createStage.DemoStage2(world);
+                LoadLevel(2);
                 currentStage = 2;
             }
             if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
             {
-                foreach (MapObject o in mapobjects)
-                {
-                    o.Delete(world);
-                }
-                createStage.DemoStage3(world);
+                LoadLevel(3);
                 currentStage = 3;
             }
 
@@ -340,6 +328,26 @@ namespace LyteGrinder
             oldMouseState = mouseState;
         }
 
+        private void LoadLevel(int levelNum)
+        {
+            foreach (MapObject o in mapobjects)
+            {
+                o.Delete(world);
+            }
+
+            switch (levelNum)
+            {
+                case 1:
+                    createStage.DemoStage1(world);
+                    break;
+                case 2:
+                    createStage.DemoStage2(world);
+                    break;
+                case 3:
+                    createStage.DemoStage3(world);
+                    break;
+            }
+        }
         private void MouseDrawing(MouseState mouseState, MouseState oldMouseState)
         {
             oldMousePos = new Vector2(oldMouseState.X, oldMouseState.Y);
