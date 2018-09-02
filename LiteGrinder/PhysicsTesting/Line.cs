@@ -99,11 +99,11 @@ namespace LiteGrinder
         {
             foreach (Line line in oldLines)
             {
-                spriteBatch.Draw(line.oldLineText, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
+                spriteBatch.Draw(line.oldLineText, line.start, null, Color.Gray, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
             }
             foreach (Line line in lines)
             {
-                spriteBatch.Draw(line.texture, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
+                spriteBatch.Draw(line.texture, line.start, null, Color.Yellow, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
             }
         }
 
