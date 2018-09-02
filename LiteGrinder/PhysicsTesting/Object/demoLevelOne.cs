@@ -26,7 +26,7 @@ namespace LiteGrinder
 
         public void DemoStage1(World world)
         {
-            Game1.numberofJet = 3;
+            Game1.maxJets = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(50, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 520)));
 
@@ -50,7 +50,7 @@ namespace LiteGrinder
 
         public void DemoStage2(World world)
         {
-            Game1.numberofJet = 3;
+            Game1.maxJets = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(350, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1670, 1020)));
 
@@ -67,7 +67,7 @@ namespace LiteGrinder
 
         public void DemoStage3(World world)
         {
-            Game1.numberofJet = 3;
+            Game1.maxJets = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(800, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 500)));
 
@@ -81,6 +81,21 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(13f, 3f), BodyType.Static, strawberry);
             
         }
+        public void DemoStage4(World world)
+        {
+            Game1.maxJets = 3;
+            player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(800, 50)));
+            player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 500)));
 
+            wallTile = Content.Load<Texture2D>("wallTile");
+            new Block(world, new Vector2(5f, 5f), ConvertUnits.ToSimUnits(330), ConvertUnits.ToSimUnits(700), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(13f, 6f), ConvertUnits.ToSimUnits(600), ConvertUnits.ToSimUnits(500), 1f, 0, BodyType.Static, wallTile);
+
+            strawberry = Content.Load<Texture2D>("strawberry");
+            new CollectableItem(world, 30, 2f, new Vector2(2f, 5f), BodyType.Static, strawberry);
+            new CollectableItem(world, 30, 2f, new Vector2(9f, 7f), BodyType.Static, strawberry);
+            new CollectableItem(world, 30, 2f, new Vector2(13f, 3f), BodyType.Static, strawberry);
+
+        }
     }
 }

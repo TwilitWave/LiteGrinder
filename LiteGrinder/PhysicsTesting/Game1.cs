@@ -22,7 +22,17 @@ namespace LyteGrinder
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
-        public static int maxJets = 3;
+        private static int _maxJets = 3;
+
+        public static int maxJets
+        {
+            get { return _maxJets; }
+            set
+            {
+                _maxJets = value;
+                numberofJet = value;
+            }
+        }
 
         private int currentLevel = 1;
         public int CurrentLevel
@@ -36,7 +46,7 @@ namespace LyteGrinder
                     currentLevel = 1;
                 }
                 loadLevel = true;
-                Line.Reset(world);
+                ResetLine();
                 Line.ClearGhostLine();
             }
         }
@@ -233,15 +243,19 @@ namespace LyteGrinder
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
             {
-                LoadLevel(1);
+                CurrentLevel = 1;
             }
             if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
             {
-                LoadLevel(2);
+                CurrentLevel = 2;
             }
             if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
             {
-                LoadLevel(3);
+                CurrentLevel = 3;
+            }
+            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
+            {
+                CurrentLevel = 4;
             }
 
             // Drawing
@@ -274,7 +288,7 @@ namespace LyteGrinder
                 if (numberofJet > 0)
                 {
                     JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
-                    if (numberofJet == 3)
+                    if (maxJets == numberofJet)
                     {
                         mapobjects.Add(jetarea);
                     }
@@ -399,7 +413,7 @@ namespace LyteGrinder
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
 
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
-            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             player.Draw(spriteBatch, gameTime);
 
