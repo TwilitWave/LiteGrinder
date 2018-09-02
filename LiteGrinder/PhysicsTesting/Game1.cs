@@ -22,8 +22,20 @@ namespace LyteGrinder
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
+
+        private int currentLevel = 1;
+        public int CurrentLevel
+        {
+            get { return currentLevel; }
+            set
+            {
+                currentLevel = value;
+                loadLevel = true;
+            }
+        }
         private Vector2 jetDirection;
 
+        private bool loadLevel = false;
         private bool gameisproceeding = false;
         private bool cameraFollow = false;
 
@@ -84,6 +96,7 @@ namespace LyteGrinder
         protected override void LoadContent()
         {
             world = new World(Vector2.UnitY * 9.82f);
+            world.Tag = this;
 
             // Debug init
             debuginfo = new DebugView(world);
@@ -164,6 +177,12 @@ namespace LyteGrinder
             keyState = Keyboard.GetState();
             mouseState = Mouse.GetState();
 
+            if(loadLevel)
+            {
+                loadLevel = false;
+                LoadLevel(CurrentLevel);
+            }
+
             if (mousePos == Vector2.Zero)
             {
                 mousePos = new Vector2(mouseState.X, mouseState.Y);
@@ -176,15 +195,7 @@ namespace LyteGrinder
             // Reset scene
             if (keyState.IsKeyDown(Keys.R))
             {
-                cam.Reset();
-                gameisproceeding = false;
-                player.ResetPosition();
-                totalLength = 0;
-                Line.Reset(world);
-
-                JetArea deleteJet = new JetArea();
-                deleteJet.Delete(world);
-                numberofJet = 3;
+                ResetScene();
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -207,15 +218,19 @@ namespace LyteGrinder
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
             {
-                LoadLevel(1);
+                CurrentLevel = 1;
             }
             if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
             {
-                LoadLevel(2);
+                CurrentLevel = 2;
             }
             if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
             {
-                LoadLevel(3);
+                CurrentLevel = 3;
+            }
+            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
+            {
+                CurrentLevel = 4;
             }
 
             // Drawing
@@ -281,12 +296,27 @@ namespace LyteGrinder
             oldMouseState = mouseState;
         }
 
+        private void ResetScene()
+        {
+            cam.Reset();
+            gameisproceeding = false;
+            player.ResetPosition();
+            totalLength = 0;
+            Line.Reset(world);
+
+            JetArea deleteJet = new JetArea();
+            deleteJet.Delete(world);
+            numberofJet = 3;
+        }
+
         private void LoadLevel(int levelNum)
         {
             foreach (MapObject o in mapobjects)
             {
                 o.Delete(world);
             }
+
+            ResetScene();
 
             switch (levelNum)
             {
@@ -298,6 +328,12 @@ namespace LyteGrinder
                     break;
                 case 3:
                     createStage.DemoStage3(world);
+                    break;
+                case 4:
+                    createStage.DemoStage4(world);
+                    break;
+                default:
+                    createStage.DemoStage1(world);
                     break;
             }
         }
@@ -338,7 +374,7 @@ namespace LyteGrinder
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
             
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
-            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             player.Draw(spriteBatch, gameTime);
 

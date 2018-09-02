@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LyteGrinder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
@@ -25,7 +26,6 @@ namespace LiteGrinder
         // Time passed since last frame
         private TimeSpan nextFrame;
         private int spriteNum = 0;
-
 
         public Player(World world, Vector2 startPos, Texture2D sprite1, Texture2D sprite2, Texture2D ballSprite, Texture2D startSprite, Texture2D endSprite, float jumpForce)
         {
@@ -83,7 +83,10 @@ namespace LiteGrinder
         // Called when player hits the end goal
         private void HitEndGoal()
         {
-            Debug.Print("GOAOOOAL");
+            if(world.Tag is Game1)
+            {
+                ((Game1)world.Tag).CurrentLevel++;
+            }
         }
 
         // Set start position
