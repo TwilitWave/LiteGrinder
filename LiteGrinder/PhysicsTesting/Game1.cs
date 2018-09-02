@@ -22,7 +22,7 @@ namespace LyteGrinder
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
-
+        
         private int currentLevel = 1;
         public int CurrentLevel
         {
@@ -195,7 +195,7 @@ namespace LyteGrinder
             // Reset scene
             if (keyState.IsKeyDown(Keys.R))
             {
-                ResetScene();
+                LoadLevel(CurrentLevel);
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -211,26 +211,22 @@ namespace LyteGrinder
             }
 
             // Reset just player circle
-            if (keyState.IsKeyDown(Keys.S))
+            if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
-                player.ResetPosition();
+                LoadLevel(CurrentLevel);
             }
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
             {
-                CurrentLevel = 1;
+                LoadLevel(1);
             }
             if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
             {
-                CurrentLevel = 2;
+                LoadLevel(2);
             }
             if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
             {
-                CurrentLevel = 3;
-            }
-            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
-            {
-                CurrentLevel = 4;
+                LoadLevel(3);
             }
 
             // Drawing
@@ -330,7 +326,7 @@ namespace LyteGrinder
                     createStage.DemoStage3(world);
                     break;
                 case 4:
-                    createStage.DemoStage4(world);
+                    //createStage.DemoStage4(world);
                     break;
                 default:
                     createStage.DemoStage1(world);
