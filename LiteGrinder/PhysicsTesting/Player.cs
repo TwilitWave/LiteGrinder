@@ -15,10 +15,9 @@ namespace LiteGrinder
         private Body body;
         private Body endGoal;
         private Fixture bodySensor;
-        private Vector2 circleOrigin;
+        private Vector2 circleOrigin, ballOrigin;
         private bool isGrounded = false;
-        private Texture2D sprite1;
-        private Texture2D sprite2 , startSprite, endSprite;
+        private Texture2D sprite1, sprite2 , startSprite, endSprite, ballSprite;
         public double jumpCD = 0;
         
         // Amount of time between frames
@@ -28,7 +27,7 @@ namespace LiteGrinder
         private int spriteNum = 0;
 
 
-        public Player(World world, Vector2 startPos, Texture2D sprite1, Texture2D sprite2, Texture2D startSprite, Texture2D endSprite, float jumpForce)
+        public Player(World world, Vector2 startPos, Texture2D sprite1, Texture2D sprite2, Texture2D ballSprite, Texture2D startSprite, Texture2D endSprite, float jumpForce)
         {
             this.jumpForce = jumpForce;
             this.startPos = startPos;
@@ -37,8 +36,10 @@ namespace LiteGrinder
             this.sprite2 = sprite2;
             this.startSprite = startSprite;
             this.endSprite = endSprite;
+            this.ballSprite = ballSprite;
 
             circleOrigin = new Vector2(sprite1.Width / 2f, sprite1.Height / 2f);
+            ballOrigin = new Vector2(ballSprite.Width / 2f, ballSprite.Height / 2f);
             Vector2 circlePos = startPos;
 
             body = world.CreateCircle(ConvertUnits.ToSimUnits(30), 10f, circlePos, BodyType.Dynamic);
@@ -139,6 +140,7 @@ namespace LiteGrinder
             }
 
             spriteBatch.Draw(tex, ConvertUnits.ToDisplayUnits(body.Position), null, Color.White, body.Rotation, circleOrigin, new Vector2(1f/18f, 1f/18f), SpriteEffects.None, 0f);
+            spriteBatch.Draw(ballSprite, ConvertUnits.ToDisplayUnits(body.Position), null, Color.White, body.Rotation, ballOrigin, new Vector2(1f / 2f, 1f / 2f), SpriteEffects.None, 0f);
             spriteBatch.Draw(startSprite, ConvertUnits.ToDisplayUnits(startPos), null, Color.White, 0, new Vector2(startSprite.Width / 2, startSprite.Height / 2), new Vector2(1f / 1.5f, 1f / 1.5f), SpriteEffects.None, 0f);
             spriteBatch.Draw(endSprite, ConvertUnits.ToDisplayUnits(endPos), null, Color.White, 0, new Vector2(endSprite.Width / 2, endSprite.Height / 2), new Vector2(1f / 1.5f, 1f / 1.5f), SpriteEffects.None, 0f);
         }
