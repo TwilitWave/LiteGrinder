@@ -12,6 +12,7 @@ namespace LiteGrinder
     {
         public static List<Body> collectedItems = new List<Body>();
         private static List<CollectableItem> items = new List<CollectableItem>();
+        public static int numberofcollectable = 0;
 
         public static Texture2D texture;
 
@@ -39,6 +40,7 @@ namespace LiteGrinder
             this.body.Tag = this;
             fixture.OnCollision += OnCollision;
             items.Add(this);
+            numberofcollectable++;
         }
 
         public bool OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
@@ -49,6 +51,7 @@ namespace LiteGrinder
             if (!collectedItems.Contains(body1))
             {
                 collectedItems.Add(body1);
+                numberofcollectable--;
                 return false;
             }
 
@@ -81,6 +84,7 @@ namespace LiteGrinder
             }
             collectedItems.Clear();
             items.Clear();
+            numberofcollectable = 0;
         }
     }
 }

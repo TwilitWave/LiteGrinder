@@ -36,6 +36,8 @@ namespace LyteGrinder
                     currentLevel = 1;
                 }
                 loadLevel = true;
+                Line.Reset(world);
+                Line.ClearGhostLine();
             }
         }
         private Vector2 jetDirection;
@@ -203,9 +205,11 @@ namespace LyteGrinder
                 Exit();
 
             // Reset scene
-            if (keyState.IsKeyDown(Keys.R))
+            if (keyState.IsKeyDown(Keys.R) && oldKeyState.IsKeyUp(Keys.R))
             {
                 ResetScene();
+                ResetLine();
+                LoadLevel(CurrentLevel);
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -221,26 +225,23 @@ namespace LyteGrinder
             }
 
             // Reset just player circle
-            if (keyState.IsKeyDown(Keys.S))
+            if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
-                player.ResetPosition();
+                ResetScene();
+                LoadLevel(CurrentLevel);
             }
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
             {
-                CurrentLevel = 1;
+                LoadLevel(1);
             }
             if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
             {
-                CurrentLevel = 2;
+                LoadLevel(2);
             }
             if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
             {
-                CurrentLevel = 3;
-            }
-            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
-            {
-                CurrentLevel = 4;
+                LoadLevel(3);
             }
 
             // Drawing
@@ -327,12 +328,12 @@ namespace LyteGrinder
             cam.Reset();
             gameisproceeding = false;
             player.ResetPosition();
+        }
+
+        private void ResetLine()
+        {
             totalLength = 0;
             Line.Reset(world);
-
-            JetArea deleteJet = new JetArea();
-            deleteJet.Delete(world);
-            numberofJet = 3;
         }
 
         private void LoadLevel(int levelNum)
@@ -341,8 +342,6 @@ namespace LyteGrinder
             {
                 o.Delete(world);
             }
-
-            ResetScene();
 
             switch (levelNum)
             {
@@ -354,6 +353,9 @@ namespace LyteGrinder
                     break;
                 case 3:
                     createStage.DemoStage3(world);
+                    break;
+                case 4:
+                    createStage.DemoStage4(world);
                     break;
                 default:
                     createStage.DemoStage1(world);
@@ -397,7 +399,7 @@ namespace LyteGrinder
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
 
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
-            spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             player.Draw(spriteBatch, gameTime);
 
