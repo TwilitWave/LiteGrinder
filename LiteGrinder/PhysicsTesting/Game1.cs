@@ -257,6 +257,10 @@ namespace LyteGrinder
             {
                 CurrentLevel = 4;
             }
+            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
+            {
+                LoadLevel(4);
+            }
 
             // Drawing
             if (mouseState.LeftButton == ButtonState.Pressed)
