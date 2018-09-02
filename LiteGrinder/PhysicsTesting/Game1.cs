@@ -46,8 +46,6 @@ namespace LyteGrinder
                     currentLevel = 1;
                 }
                 loadLevel = true;
-                ResetLine();
-                Line.ClearGhostLine();
             }
         }
         private Vector2 jetDirection;
@@ -80,6 +78,7 @@ namespace LyteGrinder
         //Map objects
         private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
         private CollectableItem collectableitem = new CollectableItem();
+        private JetArea jetArea = new JetArea();
         private Block block = new Block();
         private NoDrawArea noDraw = new NoDrawArea();
         private Vector2 oldCamPos;
@@ -156,6 +155,7 @@ namespace LyteGrinder
             mapobjects.Add(collectableitem);
             mapobjects.Add(block);
             mapobjects.Add(noDraw);
+            mapobjects.Add(jetArea);
         }
 
         /// <summary>
@@ -202,6 +202,8 @@ namespace LyteGrinder
             if(loadLevel)
             {
                 loadLevel = false;
+                ResetLine();
+                Line.ClearGhostLine();
                 LoadLevel(CurrentLevel);
             }
 
@@ -287,20 +289,14 @@ namespace LyteGrinder
                 tempJetAreaDraw = false;
                 if (numberofJet > 0)
                 {
-                    JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
-                    if (maxJets == numberofJet)
+                    if(new Vector2(mouseState.X, mouseState.Y) != jetDirection)
                     {
-                        mapobjects.Add(jetarea);
+                        JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
+                        jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
+                        jetarea.ChangeImpluse(jetDirection);
+                        numberofJet--;
                     }
-                    jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
-                    jetarea.ChangeImpluse(jetDirection);
-                    numberofJet--;
                 }
-                else
-                {
-                    return;
-                }
-     
             }
 
             if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)
@@ -398,9 +394,11 @@ namespace LyteGrinder
                 length = 1;
             }
 
-            Line newLine = new Line(world, pixel, oldLineSprite, oldMousePos, mousePos, camOffset, width, length, angle);
+            bool success = false;
+            Line newLine = new Line(world, pixel, oldLineSprite, oldMousePos, mousePos, camOffset, width, length, angle, out success);
 
-            totalLength += length;
+            if(success)
+                totalLength += length;
         }
 
         /// <summary>

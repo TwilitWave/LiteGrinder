@@ -70,7 +70,7 @@ namespace LiteGrinder.MapObject
             foreach (JetArea jet in jets)
             {
                 float rot = (float)Math.Atan2(jet.yImpulse, jet.xImpulse);
-                spriteBatch.Draw(sprite, ConvertUnits.ToDisplayUnits(jet.body.Position), null, Color.White, rot, new Vector2(sprite.Width / 2, sprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
+                spriteBatch.Draw(jet.sprite, ConvertUnits.ToDisplayUnits(jet.body.Position), null, Color.White, rot, new Vector2(jet.sprite.Width / 2, jet.sprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
             }
         }
 

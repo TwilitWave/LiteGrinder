@@ -70,8 +70,11 @@ namespace LiteGrinder.Object
         {
             foreach(NoDrawArea area in noDrawAreas)
             {
-                spriteBatch.Draw(area.text, ConvertUnits.ToDisplayUnits(area.position), new Rectangle(0, 0, (int)area.width, (int)area.height), 
-                    Color.White, rotation, new Vector2(area.width / 2, area.height / 2), new Vector2(1, 1), SpriteEffects.None, 0f);
+                if (area.text != null)
+                {
+                    spriteBatch.Draw(area.text, ConvertUnits.ToDisplayUnits(area.position), new Rectangle(0, 0, (int)area.width, (int)area.height),
+                        Color.White, rotation, new Vector2(area.width / 2, area.height / 2), new Vector2(1, 1), SpriteEffects.None, 0f);
+                }
             }
         }
 
