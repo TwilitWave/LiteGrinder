@@ -22,6 +22,7 @@ namespace LyteGrinder
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
+        public static int currentStage = 1;
         private Vector2 jetDirection;
 
         private bool gameisproceeding = false;
@@ -182,9 +183,30 @@ namespace LyteGrinder
                 totalLength = 0;
                 Line.Reset(world);
 
-                JetArea deleteJet = new JetArea();
-                deleteJet.Delete(world);
-                numberofJet = 3;
+                if (currentStage == 1)
+                {
+                    foreach (MapObject o in mapobjects)
+                    {
+                        o.Delete(world);
+                    }
+                    createStage.DemoStage1(world);
+                }
+                else if (currentStage == 2)
+                {
+                    foreach (MapObject o in mapobjects)
+                    {
+                        o.Delete(world);
+                    }
+                    createStage.DemoStage2(world);
+                }
+                else if (currentStage == 3)
+                {
+                    foreach (MapObject o in mapobjects)
+                    {
+                        o.Delete(world);
+                    }
+                    createStage.DemoStage3(world);
+                }
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -200,9 +222,31 @@ namespace LyteGrinder
             }
 
             // Reset just player circle
-            if (keyState.IsKeyDown(Keys.S))
+            if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
                 player.ResetPosition();
+                if(currentStage == 1)
+                {
+                    foreach (MapObject o in mapobjects)
+                    {
+                        o.Delete(world);
+                    }
+                    createStage.DemoStage1(world);
+                }else if(currentStage ==2)
+                {
+                    foreach (MapObject o in mapobjects)
+                    {
+                        o.Delete(world);
+                    }
+                    createStage.DemoStage2(world);
+                }else if(currentStage == 3)
+                {
+                    foreach (MapObject o in mapobjects)
+                    {
+                        o.Delete(world);
+                    }
+                    createStage.DemoStage3(world);
+                }
             }
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
@@ -212,6 +256,7 @@ namespace LyteGrinder
                     o.Delete(world);
                 }
                 createStage.DemoStage1(world);
+                currentStage = 1;
             }
             if (keyState.IsKeyDown(Keys.D2) && oldKeyState.IsKeyUp(Keys.D2))
             {
@@ -220,6 +265,7 @@ namespace LyteGrinder
                     o.Delete(world);
                 }
                 createStage.DemoStage2(world);
+                currentStage = 2;
             }
             if (keyState.IsKeyDown(Keys.D3) && oldKeyState.IsKeyUp(Keys.D3))
             {
@@ -228,6 +274,7 @@ namespace LyteGrinder
                     o.Delete(world);
                 }
                 createStage.DemoStage3(world);
+                currentStage = 3;
             }
 
             // Drawing

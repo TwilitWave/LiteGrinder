@@ -1,5 +1,6 @@
 ﻿using LiteGrinder.MapObject;
 using LiteGrinder.Object;
+using LyteGrinder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +26,7 @@ namespace LiteGrinder
 
         public void DemoStage1(World world)
         {
+            Game1.numberofJet = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(50, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 520)));
 
@@ -50,6 +52,7 @@ namespace LiteGrinder
 
         public void DemoStage2(World world)
         {
+            Game1.numberofJet = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(350, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1670, 1020)));
 
@@ -67,6 +70,7 @@ namespace LiteGrinder
 
         public void DemoStage3(World world)
         {
+            Game1.numberofJet = 3;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(800, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 500)));
 

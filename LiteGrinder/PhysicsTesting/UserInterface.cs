@@ -30,7 +30,7 @@ namespace LiteGrinder
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Score:" + score, new Vector2(100, 100), Color.Black);
+            spriteBatch.DrawString(font, "NumberofCollectable:" + CollectableItem.numberofcollectable, new Vector2(100, 100), Color.Black);
             spriteBatch.DrawString(font, (int)availableInkRate + "%", new Vector2(100, 200), Color.Black);
             spriteBatch.DrawString(font, "Jet Area : " + Game1.numberofJet, new Vector2(100, 300), Color.Black);
             spriteBatch.End();
