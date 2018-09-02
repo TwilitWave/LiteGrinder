@@ -18,7 +18,7 @@ namespace LyteGrinder
     public class Game1 : Game
     { 
         //Control variables
-        public static float maxLength = 3000;
+        public static float maxLength = 2000;
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
