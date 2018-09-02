@@ -182,11 +182,8 @@ namespace LyteGrinder
                 totalLength = 0;
                 Line.Reset(world);
 
-                foreach (MapObject o in mapobjects)
-                {
-                    o.Delete(world);
-                }
-                createStage.DemoStage1(world);
+                JetArea deleteJet = new JetArea();
+                deleteJet.Delete(world);
                 numberofJet = 3;
             }
 
