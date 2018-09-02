@@ -204,7 +204,7 @@ namespace LyteGrinder
                 loadLevel = false;
                 ResetLine();
                 Line.ClearGhostLine();
-                LoadLevel(CurrentLevel);
+                LoadLevel(CurrentLevel, true);
             }
 
             if (mousePos == Vector2.Zero)
@@ -221,7 +221,7 @@ namespace LyteGrinder
             {
                 ResetScene();
                 ResetLine();
-                LoadLevel(CurrentLevel);
+                LoadLevel(CurrentLevel, true);
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -240,7 +240,7 @@ namespace LyteGrinder
             if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
                 ResetScene();
-                LoadLevel(CurrentLevel);
+                LoadLevel(CurrentLevel, false);
             }
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
@@ -258,10 +258,6 @@ namespace LyteGrinder
             if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
             {
                 CurrentLevel = 4;
-            }
-            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
-            {
-                LoadLevel(4);
             }
 
             // Drawing
@@ -350,11 +346,15 @@ namespace LyteGrinder
             Line.Reset(world);
         }
 
-        private void LoadLevel(int levelNum)
+        private void LoadLevel(int levelNum, bool resetJets)
         {
+            int numJets = numberofJet;
             foreach (MapObject o in mapobjects)
             {
-                o.Delete(world);
+                if(!(o is JetArea) || resetJets)
+                {
+                    o.Delete(world);
+                }
             }
 
             switch (levelNum)
@@ -374,6 +374,11 @@ namespace LyteGrinder
                 default:
                     createStage.DemoStage1(world);
                     break;
+            }
+
+            if (!resetJets)
+            {
+                numberofJet = numJets;
             }
         }
         private void MouseDrawing(MouseState mouseState, MouseState oldMouseState)
