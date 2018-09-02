@@ -46,8 +46,6 @@ namespace LiteGrinder
 
             noDrawSprite = Content.Load<Texture2D>("redTransparent");
             new NoDrawArea(world, new Vector2(10f, 3f), ConvertUnits.ToSimUnits(75), ConvertUnits.ToSimUnits(800), 0, noDrawSprite);
-
-            Line.ClearGhostLine();
         }
 
         public void DemoStage2(World world)
@@ -65,7 +63,6 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(13f, 4f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(18f, 8f), BodyType.Static, strawberry);
 
-            Line.ClearGhostLine();
         }
 
         public void DemoStage3(World world)
@@ -83,8 +80,6 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(9f, 7f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(13f, 3f), BodyType.Static, strawberry);
             
-
-            Line.ClearGhostLine();
         }
 
         public void DemoStage4(World world)

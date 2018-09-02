@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using tainicom.Aether.Physics2D.Collision.Shapes;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Dynamics.Contacts;
@@ -23,19 +24,21 @@ namespace LiteGrinder.MapObject
         private BodyType bodytype;
         private CircleShape circle;
         private Fixture fixture;
+        private Texture2D sprite;
 
         public JetArea()
         {
 
         }
 
-        public JetArea(World world, float radius, float density, Vector2 position, BodyType bodytype)
+        public JetArea(World world, Texture2D sprite, float radius, float density, Vector2 position, BodyType bodytype)
         {
             this.body = world.CreateCircle(ConvertUnits.ToSimUnits(radius), density, position, bodytype);
             this.circle = new CircleShape(ConvertUnits.ToSimUnits(radius), density);
             this.fixture = body.CreateFixture(circle);
             this.body.SetIsSensor(true);
             this.body.Rotation = .4f;
+            this.sprite = sprite;
             fixture.OnCollision += OnCollision;
 
             jets.Add(this);
@@ -64,7 +67,11 @@ namespace LiteGrinder.MapObject
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
+            foreach (JetArea jet in jets)
+            {
+                float rot = (float)Math.Atan2(jet.yImpulse, jet.xImpulse);
+                spriteBatch.Draw(sprite, ConvertUnits.ToDisplayUnits(jet.body.Position), null, Color.White, rot, new Vector2(sprite.Width / 2, sprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
+            }
         }
 
         public override void Delete(World world)
