@@ -31,6 +31,8 @@ namespace LyteGrinder
             {
                 currentLevel = value;
                 loadLevel = true;
+                Line.Reset(world);
+                Line.ClearGhostLine();
             }
         }
         private Vector2 jetDirection;
@@ -193,8 +195,10 @@ namespace LyteGrinder
                 Exit();
 
             // Reset scene
-            if (keyState.IsKeyDown(Keys.R))
+            if (keyState.IsKeyDown(Keys.R) && oldKeyState.IsKeyUp(Keys.R))
             {
+                ResetScene();
+                ResetLine();
                 LoadLevel(CurrentLevel);
             }
 
@@ -213,6 +217,7 @@ namespace LyteGrinder
             // Reset just player circle
             if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
+                ResetScene();
                 LoadLevel(CurrentLevel);
             }
 
@@ -297,12 +302,12 @@ namespace LyteGrinder
             cam.Reset();
             gameisproceeding = false;
             player.ResetPosition();
+        }
+
+        private void ResetLine()
+        {
             totalLength = 0;
             Line.Reset(world);
-
-            JetArea deleteJet = new JetArea();
-            deleteJet.Delete(world);
-            numberofJet = 3;
         }
 
         private void LoadLevel(int levelNum)
@@ -311,8 +316,6 @@ namespace LyteGrinder
             {
                 o.Delete(world);
             }
-
-            ResetScene();
 
             switch (levelNum)
             {
@@ -370,7 +373,7 @@ namespace LyteGrinder
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
             
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
-            spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
+            //spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             player.Draw(spriteBatch, gameTime);
 
