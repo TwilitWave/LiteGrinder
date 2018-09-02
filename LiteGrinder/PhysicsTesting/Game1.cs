@@ -228,6 +228,10 @@ namespace LyteGrinder
             {
                 LoadLevel(3);
             }
+            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
+            {
+                LoadLevel(4);
+            }
 
             // Drawing
             if (mouseState.LeftButton == ButtonState.Pressed)
@@ -326,7 +330,7 @@ namespace LyteGrinder
                     createStage.DemoStage3(world);
                     break;
                 case 4:
-                    //createStage.DemoStage4(world);
+                    createStage.DemoStage4(world);
                     break;
                 default:
                     createStage.DemoStage1(world);
