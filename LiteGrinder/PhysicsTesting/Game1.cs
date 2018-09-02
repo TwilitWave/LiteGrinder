@@ -22,6 +22,7 @@ namespace LyteGrinder
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
+        public static int maxJets = 3;
 
         private int currentLevel = 1;
         public int CurrentLevel
@@ -30,6 +31,10 @@ namespace LyteGrinder
             set
             {
                 currentLevel = value;
+                if(currentLevel > 5)
+                {
+                    currentLevel = 1;
+                }
                 loadLevel = true;
             }
         }
@@ -38,6 +43,7 @@ namespace LyteGrinder
         private bool loadLevel = false;
         private bool gameisproceeding = false;
         private bool cameraFollow = false;
+        private bool tempJetAreaDraw = false;
 
         private World world;
         private Player player;
@@ -56,7 +62,7 @@ namespace LyteGrinder
         private demoLevelOne createStage;
         private Texture2D pixel;
         private Texture2D oldLineSprite;
-        private Texture2D background;
+        private Texture2D background, jetAreaSprite;
         private Camera2d cam;
         
         //Map objects
@@ -65,6 +71,9 @@ namespace LyteGrinder
         private Block block = new Block();
         private NoDrawArea noDraw = new NoDrawArea();
         private Vector2 oldCamPos;
+
+        private Vector2 tempJetPos;
+        private Vector2 newTempJetDir;
 
         public Game1()
         {
@@ -119,6 +128,7 @@ namespace LyteGrinder
 
             pixel = Content.Load<Texture2D>("1pixel");
             oldLineSprite = Content.Load<Texture2D>("1pixtransparent");
+            jetAreaSprite = Content.Load<Texture2D>("Tube");
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1")
@@ -243,14 +253,30 @@ namespace LyteGrinder
             if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Released)
             {
                 jetDirection = new Vector2(mouseState.X, mouseState.Y);
+
+                tempJetPos = ConvertUnits.ToSimUnits(jetDirection);
+                if (numberofJet > 0)
+                {
+                    tempJetAreaDraw = true;
+                }
+            }
+
+            // Make a JetArea
+            if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Pressed)
+            {
+                newTempJetDir = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
             }
 
             if (mouseState.RightButton == ButtonState.Released && oldMouseState.RightButton == ButtonState.Pressed)
             {
+                tempJetAreaDraw = false;
                 if (numberofJet > 0)
                 {
-                    JetArea jetarea = new JetArea(world, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
-                    mapobjects.Add(jetarea);
+                    JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
+                    if (numberofJet == 3)
+                    {
+                        mapobjects.Add(jetarea);
+                    }
                     jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
                     jetarea.ChangeImpluse(jetDirection);
                     numberofJet--;
@@ -329,9 +355,6 @@ namespace LyteGrinder
                 case 3:
                     createStage.DemoStage3(world);
                     break;
-                case 4:
-                    createStage.DemoStage4(world);
-                    break;
                 default:
                     createStage.DemoStage1(world);
                     break;
@@ -372,7 +395,7 @@ namespace LyteGrinder
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, cam.get_transformation(GraphicsDevice));
-            
+
             // Background drawing disabled until we get a tasty snack collectable because it hides the debug info
             spriteBatch.Draw(background, new Vector2(0, 0), null, Color.White, 0, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0f);
 
@@ -383,13 +406,20 @@ namespace LyteGrinder
             debuginfo.RenderDebugData(projection, cam.get_transformation2(GraphicsDevice));
             spriteBatch.End();
 
-            
+
             // Linear wrap drawing for the obstacles
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, cam.get_transformation(GraphicsDevice));
             foreach (LiteGrinder.Object.MapObject o in mapobjects)
             {
                 o.Draw(spriteBatch);
             }
+
+            if (tempJetAreaDraw)
+            {
+                float rot = (float)Math.Atan2(newTempJetDir.Y, newTempJetDir.X);
+                spriteBatch.Draw(jetAreaSprite, ConvertUnits.ToDisplayUnits(tempJetPos), null, Color.White, rot, new Vector2(jetAreaSprite.Width / 2, jetAreaSprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
+            }
+
             spriteBatch.End();
 
             ui.Draw(spriteBatch);
