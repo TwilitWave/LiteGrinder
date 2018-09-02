@@ -93,11 +93,11 @@ namespace LiteGrinder
             new Block(world, new Vector2(6f, 9f), ConvertUnits.ToSimUnits(50), ConvertUnits.ToSimUnits(550), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(9f, 7f), ConvertUnits.ToSimUnits(50), ConvertUnits.ToSimUnits(850), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(11f, 3f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(11f, 4f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(11f, 5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(13.5f, 3.5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(13.5f, 4.5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(13.5f, 5.5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(16f, 4f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(16f, 5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(16f, 6f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
 
             strawberry = Content.Load<Texture2D>("strawberry");
             new CollectableItem(world, 30, 2f, new Vector2(1.5f, 5f), BodyType.Static, strawberry);
