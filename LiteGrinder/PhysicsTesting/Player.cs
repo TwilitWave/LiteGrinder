@@ -27,7 +27,7 @@ namespace LiteGrinder
         private TimeSpan nextFrame;
         private int spriteNum = 0;
 
-        public Player(World world, Vector2 startPos, Texture2D sprite1, Texture2D sprite2, Texture2D ballSprite, Texture2D startSprite, Texture2D endSprite, float jumpForce)
+        public Player(World world, Vector2 startPos, Texture2D sprite1, Texture2D sprite2, Texture2D ballSprite, Texture2D startSprite, Texture2D endSprite, float jumpForce, Game1 game, GameTime gameTime)
         {
             this.jumpForce = jumpForce;
             this.startPos = startPos;
@@ -65,7 +65,7 @@ namespace LiteGrinder
             {
                 if (fixtureB.Body.Tag is Player)
                 {
-                    HitEndGoal();
+                    HitEndGoal(game,gameTime);
                 }
                 return true;
             };
@@ -81,11 +81,12 @@ namespace LiteGrinder
         }
 
         // Called when player hits the end goal
-        private void HitEndGoal()
+        private void HitEndGoal(Game1 game, GameTime gameTime)
         {
             if(world.Tag is Game1)
             {
                 ((Game1)world.Tag).CurrentLevel++;
+                game.startButton.Update(gameTime);
             }
         }
 

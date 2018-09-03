@@ -63,7 +63,7 @@ namespace LyteGrinder
         private MouseState mouseState, oldMouseState;
 
         private UserInterface ui;
-        private Button startButton;
+        public Button startButton;
         private Button resetButton;
  
         private DebugView debuginfo;
@@ -87,6 +87,7 @@ namespace LyteGrinder
 
         private Vector2 tempJetPos;
         private Vector2 newTempJetDir;
+        private GameTime gameTime;
 
         public Game1()
         {
@@ -145,7 +146,7 @@ namespace LyteGrinder
 
             //Object Initializations
             player = new Player(world, ConvertUnits.ToSimUnits(new Vector2(50, 50)), Content.Load<Texture2D>("Lab_Hamster 1")
-                , Content.Load<Texture2D>("Lab_Hamster 2"), Content.Load<Texture2D>("Ball"), Content.Load<Texture2D>("portal_start"), Content.Load<Texture2D>("portal_goal"), jumpForce);
+                , Content.Load<Texture2D>("Lab_Hamster 2"), Content.Load<Texture2D>("Ball"), Content.Load<Texture2D>("portal_start"), Content.Load<Texture2D>("portal_goal"), jumpForce,this,gameTime);
             background = Content.Load<Texture2D>("labBackground");
             createStage = new demoLevelOne(this.Content, player);
             InitialMap();

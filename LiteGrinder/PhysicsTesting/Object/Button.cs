@@ -6,15 +6,15 @@ using System;
 
 namespace LiteGrinder.Object
 {
-    class Button 
+    public class Button 
     {
-        int buttonX, buttonY;
-        string name;
-        Texture2D texture;
-        Texture2D texture1;
-        Texture2D texture2;
-        int textureSizeX = 200;
-        int textureSizeY = 100;
+        public int buttonX, buttonY;
+        public string name;
+        public Texture2D texture;
+        public Texture2D texture1;
+        public Texture2D texture2;
+        public int textureSizeX = 200;
+        public int textureSizeY = 100;
 
         public int ButtonX
         {
