@@ -291,6 +291,7 @@ namespace LyteGrinder
                 }
                 if (resetButton.enterButton(mouseState))
                 {
+                    startButton.Update(gameTime);
                     ResetScene();
                     ResetLine();
                     LoadLevel(CurrentLevel,true);
