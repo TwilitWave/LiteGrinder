@@ -72,6 +72,17 @@ namespace LiteGrinder.Object
                 }
 
         }
+
+        public void WhenYouHitResetButton()
+        {
+            if (texture == texture2)
+            {
+                Console.WriteLine(texture);
+                texture = texture1;
+                Game1.gameisproceeding = false;
+            }
+        }
+
         public void Draw(SpriteBatch sprite)
         {
             Rectangle destinationRectangle = new Rectangle(buttonX, buttonY, textureSizeX, textureSizeY);
