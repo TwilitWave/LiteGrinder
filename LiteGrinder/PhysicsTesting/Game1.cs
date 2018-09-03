@@ -295,8 +295,11 @@ namespace LyteGrinder
                 }
             }
 
-            // Make a JetArea
-            if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Released)
+            if (gameisproceeding == false)
+            {
+
+                // Make a JetArea
+                if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Released)
             {
                 jetDirection = new Vector2(mouseState.X, mouseState.Y);
 
@@ -307,23 +310,24 @@ namespace LyteGrinder
                 }
             }
 
-            // Make a JetArea
-            if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Pressed)
-            {
-                newTempJetDir = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
-            }
-
-            if (mouseState.RightButton == ButtonState.Released && oldMouseState.RightButton == ButtonState.Pressed)
-            {
-                tempJetAreaDraw = false;
-                if (numberofJet > 0)
+                // Make a JetArea
+                if (mouseState.RightButton == ButtonState.Pressed && oldMouseState.RightButton == ButtonState.Pressed)
                 {
-                    if(new Vector2(mouseState.X, mouseState.Y) != jetDirection)
+                    newTempJetDir = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
+                }
+
+                if (mouseState.RightButton == ButtonState.Released && oldMouseState.RightButton == ButtonState.Pressed)
+                {
+                    tempJetAreaDraw = false;
+                    if (numberofJet > 0)
                     {
-                        JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
-                        jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
-                        jetarea.ChangeImpluse(jetDirection);
-                        numberofJet--;
+                        if (new Vector2(mouseState.X, mouseState.Y) != jetDirection)
+                        {
+                            JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
+                            jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
+                            jetarea.ChangeImpluse(jetDirection);
+                            numberofJet--;
+                        }
                     }
                 }
             }
@@ -466,10 +470,12 @@ namespace LyteGrinder
                 o.Draw(spriteBatch);
             }
 
-            if (tempJetAreaDraw)
-            {
-                float rot = (float)Math.Atan2(newTempJetDir.Y, newTempJetDir.X);
-                spriteBatch.Draw(jetAreaSprite, ConvertUnits.ToDisplayUnits(tempJetPos), null, Color.White, rot, new Vector2(jetAreaSprite.Width / 2, jetAreaSprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
+            if (gameisproceeding == false) { 
+                if (tempJetAreaDraw)
+                {
+                    float rot = (float)Math.Atan2(newTempJetDir.Y, newTempJetDir.X);
+                    spriteBatch.Draw(jetAreaSprite, ConvertUnits.ToDisplayUnits(tempJetPos), null, Color.White, rot, new Vector2(jetAreaSprite.Width / 2, jetAreaSprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
+                }
             }
 
             startButton.Draw(spriteBatch);
