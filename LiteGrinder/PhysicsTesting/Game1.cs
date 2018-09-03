@@ -272,7 +272,10 @@ namespace LyteGrinder
             // Drawing
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                MouseDrawing(mouseState,oldMouseState);
+                if (gameisproceeding == false)
+                {
+                    MouseDrawing(mouseState, oldMouseState);
+                }
             }
 
             if(mouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
