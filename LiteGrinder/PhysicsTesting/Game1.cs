@@ -284,7 +284,7 @@ namespace LyteGrinder
                 {
                     ResetScene();
                     ResetLine();
-                    LoadLevel(CurrentLevel);
+                    LoadLevel(CurrentLevel,true);
                 }
             }
 
