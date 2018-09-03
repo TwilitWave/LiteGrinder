@@ -249,7 +249,7 @@ namespace LyteGrinder
             if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
                 ResetScene();
-                LoadLevel(CurrentLevel, false);
+                LoadLevel(CurrentLevel, true);
             }
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
@@ -279,6 +279,10 @@ namespace LyteGrinder
             {
                 if(startButton.enterButton(mouseState)){
                     startButton.Update(gameTime);
+                    if(gameisproceeding == false)
+                    {
+                        ResetScene();
+                    }
                 }
                 if (resetButton.enterButton(mouseState))
                 {
