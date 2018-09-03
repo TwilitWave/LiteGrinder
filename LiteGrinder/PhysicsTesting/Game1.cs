@@ -53,7 +53,7 @@ namespace LyteGrinder
         private Vector2 jetDirection;
 
         private bool loadLevel = false;
-        private bool gameisproceeding = false;
+        public static bool gameisproceeding = false;
         private bool cameraFollow = false;
         private bool tempJetAreaDraw = false;
 
@@ -65,7 +65,9 @@ namespace LyteGrinder
         private MouseState mouseState, oldMouseState;
 
         private UserInterface ui;
-
+        private Button startButton;
+        private Button resetButton;
+ 
         private DebugView debuginfo;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -148,6 +150,13 @@ namespace LyteGrinder
             background = Content.Load<Texture2D>("labBackground");
             createStage = new demoLevelOne(this.Content, player);
             InitialMap();
+
+            Texture2D start = Content.Load<Texture2D>("Play Button");
+            Texture2D pause = Content.Load<Texture2D>("Pause Button");
+            Texture2D reset = Content.Load<Texture2D>("Reset Button");
+
+            startButton = new Button("start", start, pause, 0, 950);
+            resetButton = new Button("reset", reset, pause, 200, 950);
         }
 
         private void InitialMap()
@@ -181,7 +190,7 @@ namespace LyteGrinder
             }
 
             //update UserInterface values
-            ui.Update();
+            ui.Update(gameTime,mouseState,oldMouseState);
 
             if (cameraFollow)
                 cam.Pos = ConvertUnits.ToDisplayUnits(player.GetBody().Position);
@@ -266,6 +275,19 @@ namespace LyteGrinder
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 MouseDrawing(mouseState,oldMouseState);
+            }
+
+            if(mouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
+            {
+                if(startButton.enterButton(mouseState)){
+                    startButton.Update(gameTime);
+                }
+                if (resetButton.enterButton(mouseState))
+                {
+                    ResetScene();
+                    ResetLine();
+                    LoadLevel(CurrentLevel);
+                }
             }
 
             // Make a JetArea
@@ -439,6 +461,9 @@ namespace LyteGrinder
                 float rot = (float)Math.Atan2(newTempJetDir.Y, newTempJetDir.X);
                 spriteBatch.Draw(jetAreaSprite, ConvertUnits.ToDisplayUnits(tempJetPos), null, Color.White, rot, new Vector2(jetAreaSprite.Width / 2, jetAreaSprite.Height / 2), new Vector2(1 / 8f, 1 / 8f), SpriteEffects.None, 0f);
             }
+
+            startButton.Draw(spriteBatch);
+            resetButton.Draw(spriteBatch);
 
             spriteBatch.End();
 
