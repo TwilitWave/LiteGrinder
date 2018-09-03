@@ -56,8 +56,9 @@ namespace LiteGrinder
             spriteBatch.DrawString(font, "Strawberries: " + CollectableItem.numberofcollectable, new Vector2(10, 750), Color.Red);
             spriteBatch.DrawString(font, "Ink: " + (int)availableInkRate + "%", new Vector2(10, 825), Color.Yellow);
             spriteBatch.DrawString(font, "Boost Tubes: " + Game1.numberofJet, new Vector2(10, 900), Color.Green);
-            spriteBatch.DrawString(font, "Left-Click: Draw", new Vector2(450, 940), Color.White);
-            spriteBatch.DrawString(font, "Right-Click: Place Boost Tube", new Vector2(450, 975), Color.White);
+            spriteBatch.DrawString(font, "Left-Click: Draw", new Vector2(450, 900), Color.White);
+            spriteBatch.DrawString(font, "Right-Click: (Hold) Aim Boost Tube", new Vector2(450, 940), Color.White);
+            spriteBatch.DrawString(font, "                   (Release) Place Boost Tube", new Vector2(450, 975), Color.White); 
             spriteBatch.DrawString(font, "Space(After 'Play'): Jump", new Vector2(450, 1010), Color.White);
 
             spriteBatch.End();
