@@ -41,7 +41,7 @@ namespace LyteGrinder
             set
             {
                 currentLevel = value;
-                if(currentLevel > 5)
+                if(currentLevel > 4)
                 {
                     currentLevel = 1;
                 }
