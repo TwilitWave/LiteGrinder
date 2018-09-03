@@ -52,9 +52,11 @@ namespace LiteGrinder
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+
             spriteBatch.DrawString(font, "Strawberries: " + CollectableItem.numberofcollectable, new Vector2(100, 100), Color.Red);
             spriteBatch.DrawString(font, "Ink: " + (int)availableInkRate + "%", new Vector2(100, 200), Color.Yellow);
             spriteBatch.DrawString(font, "Boost Tubes: " + Game1.numberofJet, new Vector2(100, 300), Color.Green);
+
             spriteBatch.End();
         }
 
