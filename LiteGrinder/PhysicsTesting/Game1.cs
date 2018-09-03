@@ -285,7 +285,7 @@ namespace LyteGrinder
                     if(gameisproceeding == false)
                     {
                         ResetScene();
-                        LoadLevel(CurrentLevel, true);
+                        LoadLevel(CurrentLevel, false);
                     }
                 }
                 if (resetButton.enterButton(mouseState))
