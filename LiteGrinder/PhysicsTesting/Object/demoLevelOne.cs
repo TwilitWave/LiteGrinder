@@ -46,8 +46,6 @@ namespace LiteGrinder
             new CollectableItem(world, 30, 2f, new Vector2(10f, 3f), BodyType.Static, strawberry);
             new CollectableItem(world, 30, 2f, new Vector2(15f, 7f), BodyType.Static, strawberry);
 
-            noDrawSprite = Content.Load<Texture2D>("redTransparent");
-            new NoDrawArea(world, new Vector2(10f, 3f), ConvertUnits.ToSimUnits(75), ConvertUnits.ToSimUnits(800), 0, noDrawSprite);
         }
 
         public void DemoStage2(World world)
