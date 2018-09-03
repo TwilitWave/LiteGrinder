@@ -26,7 +26,8 @@ namespace LiteGrinder
 
         public void DemoStage1(World world)
         {
-            Game1.maxJets = 3;
+            Game1.maxJets = 1;
+            Game1.maxLength = 2000;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(50, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 520)));
 
@@ -50,7 +51,8 @@ namespace LiteGrinder
 
         public void DemoStage2(World world)
         {
-            Game1.maxJets = 3;
+            Game1.maxJets = 2;
+            Game1.maxLength = 2000;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(350, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1670, 1020)));
 
@@ -68,6 +70,7 @@ namespace LiteGrinder
         public void DemoStage3(World world)
         {
             Game1.maxJets = 3;
+            Game1.maxLength = 2000;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(800, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 500)));
 
@@ -83,6 +86,8 @@ namespace LiteGrinder
         }
         public void DemoStage4(World world)
         {
+            Game1.maxJets = 3;
+            Game1.maxLength = 1000;
             player.SetStartPosition(ConvertUnits.ToSimUnits(new Vector2(150, 50)));
             player.SetGoalPosition(ConvertUnits.ToSimUnits(new Vector2(1870, 350)));
 
@@ -92,11 +97,11 @@ namespace LiteGrinder
             new Block(world, new Vector2(6f, 9f), ConvertUnits.ToSimUnits(50), ConvertUnits.ToSimUnits(550), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(9f, 7f), ConvertUnits.ToSimUnits(50), ConvertUnits.ToSimUnits(850), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(11f, 3f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(11f, 4f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(11f, 5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(13.5f, 3.5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(13.5f, 4.5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(13.5f, 5.5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
             new Block(world, new Vector2(16f, 4f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
-            new Block(world, new Vector2(16f, 5f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
+            new Block(world, new Vector2(16f, 6f), ConvertUnits.ToSimUnits(150), ConvertUnits.ToSimUnits(25), 1f, 0, BodyType.Static, wallTile);
 
             strawberry = Content.Load<Texture2D>("strawberry");
             new CollectableItem(world, 30, 2f, new Vector2(1.5f, 5f), BodyType.Static, strawberry);

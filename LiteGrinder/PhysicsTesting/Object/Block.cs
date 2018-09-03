@@ -46,6 +46,8 @@ namespace LiteGrinder.Object
             block.SetFriction(friction);
 
             blocks.Add(this);
+
+            new NoDrawArea(world, position, width, height, rotation, null);
         }
 
         public override void Update(World world)

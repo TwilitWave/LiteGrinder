@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using LiteGrinder.Object;
+using LyteGrinder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
@@ -20,7 +21,7 @@ namespace LiteGrinder
         private static List<Line> lines = new List<Line>();
         private static Line[] oldLines = new Line[0];
 
-        public Line(World world, Texture2D texture, Texture2D oldText, Vector2 oldMousePos, Vector2 mousePos, Vector2 camOffset, float width, float length, float angle)
+        public Line(World world, Texture2D texture, Texture2D oldText, Vector2 oldMousePos, Vector2 mousePos, Vector2 camOffset, float width, float length, float angle, out bool success)
         {
             this.texture = texture;
             this.oldLineText = oldText;
@@ -40,19 +41,25 @@ namespace LiteGrinder
                 points[fract-1] = mousePos;
                 Vector2 fractVec = new Vector2(fract, fract);
                 Vector2 divVec = Vector2.Divide(points[fract - 1] - points[0], fractVec);
+                bool t;
                 for (int i = 1; i < fract; i++)
                 {
                     if (i != fract - 1)
-                    { 
+                    {
                         points[i] = points[i - 1] + divVec;
                     }
                     newLength = Vector2.Distance(points[i], points[i - 1]);
 
                     if (newLength > 0)
                     {
-                        new Line(world, texture, oldText, points[i - 1], points[i], camOffset, width, newLength, angle);
+                        new Line(world, texture, oldText, points[i - 1], points[i], camOffset, width, newLength, angle, out t);
+                        if(!t)
+                        {
+                            Game1.totalLength -= newLength;
+                        }
                     }
                 }
+                success = true;
                 return;
             }
 
@@ -60,6 +67,7 @@ namespace LiteGrinder
             {
                 if (area.rect.Contains(mousePos))
                 {
+                    success = false;
                     return;
                 }
             }
@@ -84,17 +92,18 @@ namespace LiteGrinder
             body = box;
 
             lines.Add(this);
+            success = true;
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
             foreach (Line line in oldLines)
             {
-                spriteBatch.Draw(line.oldLineText, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
+                spriteBatch.Draw(line.oldLineText, line.start, null, Color.Gray, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
             }
             foreach (Line line in lines)
             {
-                spriteBatch.Draw(line.texture, line.start, null, Color.White, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
+                spriteBatch.Draw(line.texture, line.start, null, Color.Yellow, line.angle, Vector2.Zero, new Vector2(line.length, line.width), SpriteEffects.None, 0);
             }
         }
 
@@ -119,6 +128,7 @@ namespace LiteGrinder
 
         public void DeleteLine(World world)
         {
+            Game1.totalLength -= length;
             world.Remove(body);
             lines.Remove(this);
         }

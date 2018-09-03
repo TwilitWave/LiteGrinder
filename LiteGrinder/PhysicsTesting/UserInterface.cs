@@ -52,6 +52,7 @@ namespace LiteGrinder
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+<<<<<<< HEAD
             spriteBatch.DrawString(font, "NumberofCollectable:" + CollectableItem.numberofcollectable, new Vector2(100, 100), Color.Black);
             spriteBatch.DrawString(font, (int)availableInkRate + "%", new Vector2(100, 200), Color.Black);
             spriteBatch.DrawString(font, "Jet Area : " + Game1.numberofJet, new Vector2(100, 300), Color.Black);
@@ -59,6 +60,11 @@ namespace LiteGrinder
             //startButton.Draw(spriteBatch);
             //resetButton.Draw(spriteBatch);
 
+=======
+            spriteBatch.DrawString(font, "Strawberries: " + CollectableItem.numberofcollectable, new Vector2(100, 100), Color.Red);
+            spriteBatch.DrawString(font, "Ink: " + (int)availableInkRate + "%", new Vector2(100, 200), Color.Yellow);
+            spriteBatch.DrawString(font, "Boost Tubes: " + Game1.numberofJet, new Vector2(100, 300), Color.Green);
+>>>>>>> 08106152da6311f68084b4fcee4b81ed54d0c069
             spriteBatch.End();
         }
 

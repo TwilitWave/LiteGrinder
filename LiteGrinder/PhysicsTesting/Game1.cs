@@ -18,7 +18,7 @@ namespace LyteGrinder
     public class Game1 : Game
     { 
         //Control variables
-        public static float maxLength = 3000;
+        public static float maxLength = 2000;
         public static float totalLength = 0;
         public static float jumpForce = -18;
         public static int numberofJet = 3;
@@ -46,8 +46,6 @@ namespace LyteGrinder
                     currentLevel = 1;
                 }
                 loadLevel = true;
-                ResetLine();
-                Line.ClearGhostLine();
             }
         }
         private Vector2 jetDirection;
@@ -82,6 +80,7 @@ namespace LyteGrinder
         //Map objects
         private List<LiteGrinder.Object.MapObject> mapobjects = new List<LiteGrinder.Object.MapObject>();
         private CollectableItem collectableitem = new CollectableItem();
+        private JetArea jetArea = new JetArea();
         private Block block = new Block();
         private NoDrawArea noDraw = new NoDrawArea();
         private Vector2 oldCamPos;
@@ -165,6 +164,7 @@ namespace LyteGrinder
             mapobjects.Add(collectableitem);
             mapobjects.Add(block);
             mapobjects.Add(noDraw);
+            mapobjects.Add(jetArea);
         }
 
         /// <summary>
@@ -211,7 +211,9 @@ namespace LyteGrinder
             if(loadLevel)
             {
                 loadLevel = false;
-                LoadLevel(CurrentLevel);
+                ResetLine();
+                Line.ClearGhostLine();
+                LoadLevel(CurrentLevel, true);
             }
 
             if (mousePos == Vector2.Zero)
@@ -228,7 +230,7 @@ namespace LyteGrinder
             {
                 ResetScene();
                 ResetLine();
-                LoadLevel(CurrentLevel);
+                LoadLevel(CurrentLevel, true);
             }
 
             if (keyState.IsKeyDown(Keys.W) && oldKeyState.IsKeyUp(Keys.W))
@@ -247,7 +249,7 @@ namespace LyteGrinder
             if (keyState.IsKeyDown(Keys.S) && oldKeyState.IsKeyUp(Keys.S))
             {
                 ResetScene();
-                LoadLevel(CurrentLevel);
+                LoadLevel(CurrentLevel, false);
             }
 
             if (keyState.IsKeyDown(Keys.D1) && oldKeyState.IsKeyUp(Keys.D1))
@@ -265,10 +267,6 @@ namespace LyteGrinder
             if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
             {
                 CurrentLevel = 4;
-            }
-            if (keyState.IsKeyDown(Keys.D4) && oldKeyState.IsKeyUp(Keys.D4))
-            {
-                LoadLevel(4);
             }
 
             // Drawing
@@ -313,20 +311,14 @@ namespace LyteGrinder
                 tempJetAreaDraw = false;
                 if (numberofJet > 0)
                 {
-                    JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
-                    if (maxJets == numberofJet)
+                    if(new Vector2(mouseState.X, mouseState.Y) != jetDirection)
                     {
-                        mapobjects.Add(jetarea);
+                        JetArea jetarea = new JetArea(world, jetAreaSprite, 60, 2f, ConvertUnits.ToSimUnits(jetDirection), BodyType.Static);
+                        jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
+                        jetarea.ChangeImpluse(jetDirection);
+                        numberofJet--;
                     }
-                    jetDirection = new Vector2(mouseState.X, mouseState.Y) - jetDirection;
-                    jetarea.ChangeImpluse(jetDirection);
-                    numberofJet--;
                 }
-                else
-                {
-                    return;
-                }
-     
             }
 
             if (mouseState.LeftButton == ButtonState.Released || mouseState.RightButton == ButtonState.Released)
@@ -376,11 +368,15 @@ namespace LyteGrinder
             Line.Reset(world);
         }
 
-        private void LoadLevel(int levelNum)
+        private void LoadLevel(int levelNum, bool resetJets)
         {
+            int numJets = numberofJet;
             foreach (MapObject o in mapobjects)
             {
-                o.Delete(world);
+                if(!(o is JetArea) || resetJets)
+                {
+                    o.Delete(world);
+                }
             }
 
             switch (levelNum)
@@ -400,6 +396,11 @@ namespace LyteGrinder
                 default:
                     createStage.DemoStage1(world);
                     break;
+            }
+
+            if (!resetJets)
+            {
+                numberofJet = numJets;
             }
         }
         private void MouseDrawing(MouseState mouseState, MouseState oldMouseState)
@@ -424,9 +425,11 @@ namespace LyteGrinder
                 length = 1;
             }
 
-            Line newLine = new Line(world, pixel, oldLineSprite, oldMousePos, mousePos, camOffset, width, length, angle);
+            bool success = false;
+            Line newLine = new Line(world, pixel, oldLineSprite, oldMousePos, mousePos, camOffset, width, length, angle, out success);
 
-            totalLength += length;
+            if(success)
+                totalLength += length;
         }
 
         /// <summary>
